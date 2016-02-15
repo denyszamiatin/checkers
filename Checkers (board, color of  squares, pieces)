@@ -1,0 +1,46 @@
+BLACK_SQUARE = 'b'
+WHITE_SQUARE = 'w'
+BLACK_CHECKER = '0'
+WHITE_CHECKER = '1'
+
+def set_board():
+    board = []
+    for x in range(8):
+        board.append(['-', '-', '-', '-', '-', '-', '-', '-'])
+    return board
+
+board = set_board()
+
+def print_board(board):
+    for row in board:
+        print (' '.join(row))
+
+print_board(board)
+print ('')
+
+def color_board(board):
+    for row in range(8):
+        for column in range(8):
+            if row % 2 == 0 and column % 2 == 0 or row % 2 and column % 2:
+                board[row][column] = BLACK_SQUARE
+            else:
+                board[row][column] = WHITE_SQUARE
+    return board
+
+board = color_board(board)
+print_board(board)
+print ('')
+
+def checkers_on(board):
+    for row in range(8):
+        for column in range(8):
+            if board[row][column] == BLACK_SQUARE and row <= 2:
+                board[row][column] = BLACK_CHECKER
+            elif board[row][column] == BLACK_SQUARE and row in range (5,8):
+                board[row][column] = WHITE_CHECKER
+    return board
+
+board = checkers_on(board)
+print_board(board)
+
+
