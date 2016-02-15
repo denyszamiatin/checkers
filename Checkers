@@ -1,5 +1,5 @@
-CHECKS_COLOR_1 = 'A'
-CHECKS_COLOR_2 = 'B'
+CHECKS_COLOR_1 = 'B'
+CHECKS_COLOR_2 = 'W'
 
 def set_board():
     checks = [['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
@@ -28,22 +28,8 @@ def set_boart_with_figures(checks):
     '''
     Put checks on board. (sorry for my English)
 
-    >>> set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
-    [[' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
-     ['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
-     [' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
-     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-     ['X', ' ', 'X', ' ', 'X', ' ', 'X', ' '],
-     [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X'],
-     ['X', ' ', 'X', ' ', 'X', ' ', 'X', ' ']]
+    >>> set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
+    [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
     '''
 
     n = 0
@@ -69,7 +55,26 @@ def print_board(checks):  # must be scary :)
         ind += 1
         print("|\n" + " " + "+---" * 8 + "+")
     print('   A   B   C   D   E   F   G   H')
-    
-    
+
+
 checkers = set_board()
 print_board(checkers)
+
+def return_color_checker(y, x):
+    '''
+    Checks letters in a given field
+    >>> return_color_checker(0, 1)
+    'black'
+    >>> return_color_checker(7, 2)
+    'white'
+    >>> return_color_checker(7, 1)
+
+    '''
+    if checks[y][x] == 'B':
+        return 'black'
+    elif checks[y][x] == 'W':
+        return 'white'
+
+#if __name__ == "__main__":
+#    import doctest
+#    doctest.testmod()
