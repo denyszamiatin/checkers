@@ -1,3 +1,6 @@
+CHECKS_COLOR_1 = 'O'
+CHECKS_COLOR_2 = 'X'
+
 def set_board():
     checks = [['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
               [' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
@@ -9,6 +12,52 @@ def set_board():
               [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X']]
     return checks
 
+def put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR):
+    for number_field in range(len(checks[n])):
+        if number_field % 2 != 0:
+            checks[n][number_field] = CHECKS_COLOR
+    return checks
+
+def put_checks_on_even_numbers(checks, n, CHECKS_COLOR):
+    for number_field in range(len(checks[n])):
+        if number_field % 2 == 0:
+            checks[n][number_field] = CHECKS_COLOR
+    return checks
+
+def set_boart_with_figures(checks):
+    '''
+    Put checks on board. (sorry for my English)
+
+    >>> set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+			        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
+    [[' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
+     ['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
+     [' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+     [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X'],
+     ['X', ' ', 'X', ' ', 'X', ' ', 'X', ' '],
+     [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X']]
+    '''
+
+    n = 0
+    while n < len(checks):
+        if n % 2 == 0 and n < 3:
+            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_1)
+        if n % 2 != 0 and n < 3:
+            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_1)
+        if n % 2 == 0 and n > 4:
+            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2)
+        if n % 2 != 0 and n > 4:
+            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_2)
+        n += 1
+    return checks
 
 def print_board(checks):  # must be scary :)
     ind = 1
