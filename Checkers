@@ -1,0 +1,26 @@
+def set_board():
+    checks = [['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
+              [' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
+              ['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
+              [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
+              ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
+              [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X'],
+              ['X', ' ', 'X', ' ', 'X', ' ', 'X', ' '],
+              [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X']]
+    return checks
+
+
+def print_board(checks):  # must be scary :)
+    ind = 1
+    print(" " + "+---" * 8 + "+")
+    for i in checks:
+        print(ind, end='')
+        for j in i:
+            print('| %s ' % j, end='')
+        ind += 1
+        print("|\n" + " " + "+---" * 8 + "+")
+    print('   A   B   C   D   E   F   G   H')
+    
+    
+checkers = set_board()
+print_board(checkers)
