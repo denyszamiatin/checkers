@@ -34,10 +34,11 @@ print ('')
 def checkers_on(board):
     for row in range(8):
         for column in range(8):
-            if board[row][column] == BLACK_SQUARE and row <= 2:
-                board[row][column] = BLACK_CHECKER
-            elif board[row][column] == BLACK_SQUARE and row in range (5,8):
-                board[row][column] = WHITE_CHECKER
+            if board[row][column] == BLACK_SQUARE:
+                if row in range(3):
+                    board[row][column] = BLACK_CHECKER
+                elif row in range(5, 8):
+                    board[row][column] = WHITE_CHECKER
     return board
 
 board = checkers_on(board)
