@@ -53,9 +53,9 @@ def set_boart_with_figures(checks):
         if n % 2 != 0 and n < 3:
             put_checks_on_even_numbers(checks, n, CHECKS_COLOR_1)
         if n % 2 == 0 and n > 4:
-            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2)
-        if n % 2 != 0 and n > 4:
             put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_2)
+        if n % 2 != 0 and n > 4:
+            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2)
         n += 1
     return checks
 
