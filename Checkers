@@ -60,6 +60,14 @@ def print_board(checks):  # must be scary :)
 checkers = set_board()
 print_board(checkers)
 
+# function to return the color of square taking coordinates (0...7) as arguments
+def color_of_square(row, column):
+    if row % 2 == 0 and column % 2 == 0 or row % 2 and column % 2:
+        return 'black'
+    else:
+        return 'white'
+
+
 def return_color_checker(y, x):
     '''
     Checks letters in a given field
