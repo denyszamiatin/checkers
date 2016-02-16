@@ -71,6 +71,7 @@ def color_of_square(row, column):
 def return_color_checker(y, x):
     '''
     Checks letters in a given field
+    >>> checks = set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
     >>> return_color_checker(0, 1)
     'black'
     >>> return_color_checker(7, 2)
