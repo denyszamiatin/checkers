@@ -1,4 +1,4 @@
-BLACK_SQUARE = '-'
+BLACK_SQUARE = '*'
 WHITE_SQUARE = ' '
 BLACK_CHECKER = '0'
 WHITE_CHECKER = '1'
@@ -6,20 +6,23 @@ WHITE_CHECKER = '1'
 def set_board():
     board = []
     for x in range(8):
-        board.append(['*', '*', '*', '*', '*', '*', '*', '*'])
+        board.append([' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '])
     return board
 
 def print_board(board):
+    n = 8
     for row in board:
-        print (' '.join(row))
+        print ((str(n)), ' ', (' '.join(row)))
+        n -= 1
+    print ('')
+    print ('    ' + ' '.join(('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')))
+    print ('')
 
 def color_board(board):
     for row in range(8):
         for column in range(8):
             if row % 2 == 0 and column % 2 == 0 or row % 2 and column % 2:
                 board[row][column] = BLACK_SQUARE
-            else:
-                board[row][column] = WHITE_SQUARE
     return board
 
 def checkers_on(board):
@@ -91,6 +94,7 @@ def move_direction(coordinates):
 
 coordinates = input('Enter checker coordinates, (1-8)(A-H)? ')
 print ('Possible move:', move_direction(coordinates))
+
 
 
 
