@@ -1,15 +1,15 @@
 CHECKS_COLOR_1 = 'B'
 CHECKS_COLOR_2 = 'W'
 
-def set_board():
-    checks = [['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
-              [' ', 'O', ' ', 'O', ' ', 'O', ' ', 'O'],
-              ['O', ' ', 'O', ' ', 'O', ' ', 'O', ' '],
-              [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
-              ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
-              [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X'],
-              ['X', ' ', 'X', ' ', 'X', ' ', 'X', ' '],
-              [' ', 'X', ' ', 'X', ' ', 'X', ' ', 'X']]
+def set_board(): #sorry for htis
+    checks = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
     return checks
 
 def put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR):
@@ -83,6 +83,32 @@ def return_color_checker(y, x):
         return 'black'
     elif checks[y][x] == 'W':
         return 'white'
+
+#demo function definition to check the possibility of movement on the specified square
+def possibility_to_go(y1, x1, y2, x2):
+    '''
+    check the possibility of movement on the specified square
+    >>> checks = set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
+    >>> possibility_to_go(2, 1, 3, 1)
+    False
+    >>> possibility_to_go(2, 1, 1, 0)
+    False
+    >>> possibility_to_go(1, 0, 2, 1)
+    False
+    >>> possibility_to_go(2, 1, 3, 0)
+    True
+    >>> possibility_to_go(2, 1, 4, 3)
+    False
+    '''
+    if checks[y1][x1] == ' ':
+        return False
+    if color_of_square(y2, x2) == 'black':
+        if direction_of_motion(y2, x2) == True: #not yet existing function
+            if y2 - y1 == 1:
+                if checks[y2][x2] == ' ':
+                return True
+    else:
+        return False
 
 #if __name__ == "__main__":
 #    import doctest
