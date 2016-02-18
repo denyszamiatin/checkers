@@ -43,6 +43,7 @@ def set_boart_with_figures(checks):
         if n % 2 != 0 and n > 4:
             put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2)
         n += 1
+    print_board(checks)
     return checks
 
 def print_board(checks):  # must be scary :)
