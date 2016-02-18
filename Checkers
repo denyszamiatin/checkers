@@ -46,14 +46,14 @@ def set_boart_with_figures(checks):
     print_board(checks)
     return checks
 
-def print_board(checks):  # must be scary :)
-    ind = 1
+def print_board(checks):  # must be scary :) sorry for htis to ))
+    ind = 8
     print(" " + "+---" * 8 + "+")
     for i in checks:
         print(ind, end='')
         for j in i:
             print('| %s ' % j, end='')
-        ind += 1
+        ind -= 1
         print("|\n" + " " + "+---" * 8 + "+")
     print('   A   B   C   D   E   F   G   H')
 
