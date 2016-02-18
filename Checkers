@@ -85,6 +85,14 @@ def return_color_checker(y, x):
     elif checks[y][x] == 'W':
         return 'white'
 
+#function to return direction of motion taking coordinates y, x(0...8, 0...8) as arguments
+def direction_of_motion(y, x):
+if return_color_checker(y, x) == 'black':
+    y -= 1
+elif return_color_checker(y, x) == 'white':
+    y += 1
+return y1
+
 #demo function definition to check the possibility of movement on the specified square
 def possibility_to_go(y1, x1, y2, x2):
     '''
@@ -111,6 +119,8 @@ def possibility_to_go(y1, x1, y2, x2):
                                 return True
     else:
         return False
+
+
 
 #if __name__ == "__main__":
 #    import doctest
