@@ -106,7 +106,7 @@ def possibility_to_go(y1, x1, y2, x2):
         if direction_of_motion(y2, x2) == True: #not yet existing function
             if y2 - y1 == 1:
                 if checks[y2][x2] == ' ':
-                return True
+                                return True
     else:
         return False
 
