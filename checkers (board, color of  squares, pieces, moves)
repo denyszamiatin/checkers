@@ -44,24 +44,6 @@ def check_square(row, column):
         if board[row][column] == BLACK_SQUARE:
             return True
 
-def check_move(row, column):
-    moves = ''
-    if board[row][column] == BLACK_CHECKER:
-        row += 1
-        if check_square(row, column - 1):
-            moves = str(8 - row) + str(chr(column - 1 + 65))
-        if check_square(row, column + 1):
-            moves = moves + ' ' +  str(8 - row) + str(chr(column + 1 + 65))
-    elif board[row][column] == WHITE_CHECKER:
-        row -= 1
-        if check_square(row, column - 1):
-            moves = str(8 - row) + str(chr(column - 1 + 65))
-        if check_square(row, column + 1):
-            moves = moves + ' ' +  str(8 - row) + str(chr(column + 1 + 65))
-    else:
-        moves = 'Incorrect initial coordinates. No checker'
-    return moves
-
 def convert_to_row(coordinates):
     return 8 - int(coordinates[0])
 
@@ -80,11 +62,29 @@ def check_coordinates(coordinates):
         print ('Incorrect coordinates')
         exit()
 
-def move_direction(coordinates):
-    check_coordinates(coordinates)
+def check_move(coordinates):
+    moves = ''
     row = convert_to_row(coordinates)
     column = convert_to_column(coordinates)
-    moves = check_move(row, column)
+    if board[row][column] == BLACK_CHECKER:
+        row += 1
+        if check_square(row, column - 1):
+            moves = str(8 - row) + str(chr(column - 1 + 65))
+        if check_square(row, column + 1):
+            moves = moves + ' ' +  str(8 - row) + str(chr(column + 1 + 65))
+    elif board[row][column] == WHITE_CHECKER:
+        row -= 1
+        if check_square(row, column - 1):
+            moves = str(8 - row) + str(chr(column - 1 + 65))
+        if check_square(row, column + 1):
+            moves = moves + ' ' +  str(8 - row) + str(chr(column + 1 + 65))
+    else:
+        moves = 'Incorrect initial coordinates. No checker'
+    return moves
+
+def move_direction(coordinates):
+    check_coordinates(coordinates)
+    moves = check_move(coordinates)
     if moves == '':
         moves = 'None'
     return moves
