@@ -1,7 +1,14 @@
+import os
+
 CHECKS_COLOR_1 = 'black'
 CHECKS_COLOR_2 = 'white'
 CHECKS_COLOR_1_SHORT = CHECKS_COLOR_1[0].upper()
 CHECKS_COLOR_2_SHORT = CHECKS_COLOR_2[0].upper()
+
+
+def clrscr():
+    os.system('cls' if os.name=='nt' else 'clear')
+
 
 def set_board(): #sorry for htis
     checks = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -143,6 +150,31 @@ def possibility_to_go(y1, x1, y2, x2):
     else:
         return False
 
+
+def make_move(color):
+    while True:
+        try :
+            row_begin, col_begin = convert()
+            if is_black(row_begin, col_begin) and way_move(color, row_begin, col_begin):
+                print('выбрана шашка')
+                break
+        except TypeError:
+            print('Не правильный ввод')
+        else:
+            print("Там ничего интересного нет")
+    while True:
+        print('куда будем ходить?')
+        try:
+            row_end, col_end = convert()
+            if way_check(row_begin, col_begin, row_end, col_end, color):
+                checkers[row_begin][col_begin], checkers[row_end][col_end] = checkers[row_end][col_end], checkers[row_begin][col_begin]
+                break
+        except TypeError:
+            print('Это куда ж ты ходить так собрался? Пробуй ещеё раз')
+        else:
+            print('Чёт не хочется мне туда ходить. Попробуй ещё раз')
+    clrscr()
+    print_board(checkers)
 
 #if __name__ == "__main__":
 #    import doctest
