@@ -95,7 +95,16 @@ def direction_of_motion(y, x):
         y -= 1
     return y
 
-#definition to check the possibility of movement on the specified square
+def check_falling_into_field(y, x):
+    try:
+        checks[y][x]
+    except IndexError:
+        return False
+    else:
+        return True
+
+
+#demo function definition to check the possibility of movement on the specified square
 def possibility_to_go(y1, x1, y2, x2):
     '''
     check the possibility of movement on the specified square
@@ -112,21 +121,27 @@ def possibility_to_go(y1, x1, y2, x2):
     >>> possibility_to_go(2, 1, 4, 3)
     False
     '''
+
     # y1, x1 coordinates of the beginning of movement
     if checks[y1][x1] == ' ':
         return False
     # y2, x2 coordinates of the endpoints movement
-    if color_of_square(y2, x2) == 'black':
-        if direction_of_motion(y1, x1) == y2:
-            if checks[y2][x2] == ' ':
-                    return True
+    if check_falling_into_field(y1, x1) and check_falling_into_field(y2, x2):
+        if color_of_square(y2, x2) == 'black':
+            if direction_of_motion(y1, x1) == y2:
+                if abs(x1 - x2) == 1 and y1 == abs(y1) and x1 == abs(x1) and y2 == abs(y2) and x2 == abs(x2):
+                    if checks[y2][x2] == ' ':
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
             else:
                 return False
         else:
             return False
     else:
         return False
-
 
 #if __name__ == "__main__":
 #    import doctest
