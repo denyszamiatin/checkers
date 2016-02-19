@@ -143,6 +143,7 @@ def possibility_to_go(y1, x1, y2, x2):
     else:
         return False
 
+
 #if __name__ == "__main__":
 #    import doctest
 #    doctest.testmod()
