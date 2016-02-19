@@ -1,5 +1,7 @@
-CHECKS_COLOR_1 = 'B'
-CHECKS_COLOR_2 = 'W'
+CHECKS_COLOR_1 = 'black'
+CHECKS_COLOR_2 = 'white'
+CHECKS_COLOR_1_SHORT = CHECKS_COLOR_1[0].upper()
+CHECKS_COLOR_2_SHORT = CHECKS_COLOR_2[0].upper()
 
 def set_board(): #sorry for htis
     checks = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -30,18 +32,19 @@ def set_boart_with_figures(checks):
 
     >>> set_boart_with_figures([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
+
     '''
 
     n = 0
     while n < len(checks):
         if n % 2 == 0 and n < 3:
-            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_1)
+            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_1_SHORT)
         if n % 2 != 0 and n < 3:
-            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_1)
+            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_1_SHORT)
         if n % 2 == 0 and n > 4:
-            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_2)
+            put_checks_on_an_even_numbers(checks, n, CHECKS_COLOR_2_SHORT)
         if n % 2 != 0 and n > 4:
-            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2)
+            put_checks_on_even_numbers(checks, n, CHECKS_COLOR_2_SHORT)
         n += 1
     print_board(checks)
     return checks
@@ -58,16 +61,15 @@ def print_board(checks):  # must be scary :) sorry for htis to ))
     print('   A   B   C   D   E   F   G   H')
 
 
-checkers = set_board()
-print_board(checkers)
+checks = set_board()
+print_board(checks)
 
 # function to return the color of square taking coordinates (0...7) as arguments
 def color_of_square(row, column):
     if row % 2 == 0 and column % 2 == 0 or row % 2 and column % 2:
-        return 'black'
-    else:
         return 'white'
-
+    else:
+        return 'black'
 
 def return_color_checker(y, x):
     '''
@@ -80,12 +82,20 @@ def return_color_checker(y, x):
     >>> return_color_checker(7, 1)
 
     '''
-    if checks[y][x] == 'B':
-        return 'black'
-    elif checks[y][x] == 'W':
-        return 'white'
+    if checks[y][x] == CHECKS_COLOR_1_SHORT:
+        return CHECKS_COLOR_1
+    elif checks[y][x] == CHECKS_COLOR_2_SHORT:
+        return CHECKS_COLOR_2
 
-#demo function definition to check the possibility of movement on the specified square
+#function to return direction of motion taking coordinates y, x(0...8, 0...8) as arguments
+def direction_of_motion(y, x):
+    if return_color_checker(y, x) == CHECKS_COLOR_1:
+        y += 1
+    elif return_color_checker(y, x) == CHECKS_COLOR_2:
+        y -= 1
+    return y
+
+#definition to check the possibility of movement on the specified square
 def possibility_to_go(y1, x1, y2, x2):
     '''
     check the possibility of movement on the specified square
@@ -102,13 +112,18 @@ def possibility_to_go(y1, x1, y2, x2):
     >>> possibility_to_go(2, 1, 4, 3)
     False
     '''
+    # y1, x1 coordinates of the beginning of movement
     if checks[y1][x1] == ' ':
         return False
+    # y2, x2 coordinates of the endpoints movement
     if color_of_square(y2, x2) == 'black':
-        if direction_of_motion(y2, x2) == True: #not yet existing function
-            if y2 - y1 == 1:
-                if checks[y2][x2] == ' ':
-                                return True
+        if direction_of_motion(y1, x1) == y2:
+            if checks[y2][x2] == ' ':
+                    return True
+            else:
+                return False
+        else:
+            return False
     else:
         return False
 
