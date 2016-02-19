@@ -61,6 +61,22 @@ def print_board(checks):  # must be scary :) sorry for htis to ))
     print('   A   B   C   D   E   F   G   H')
 
 
+def convert():  # Выбор шашки возвращает координаты
+    coordinates = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
+    col = input('Столбец = ').upper()
+    row = input('Строка = ')
+    try:
+        0 < int(row) < 9
+        if col not in 'ABCDEFGH':
+            raise ValueError
+    except ValueError:
+        print('Неправильный ввод')
+    else:
+        col = int(coordinates[col])
+        row = int(row) - 1
+        return row, col
+
+
 checks = set_board()
 print_board(checks)
 
