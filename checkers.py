@@ -99,6 +99,27 @@ def print_board(checks):
     print('   A   B   C   D   E   F   G   H')
 
 
+def get_input():  # Выбор шашки возвращает координаты
+    coordinates = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
+    while True:
+        try:
+            col = input('Столбец = ').upper()
+            row = int(input('Строка = ')) - 1
+            if col not in coordinates.keys():
+                raise ValueError
+            if row > 7:
+                raise ValueError
+            if row < 0:
+                raise ValueError
+        except ValueError:
+            print('Неправильный ввод')
+        except KeyError:
+            print('Ужос')
+        else:
+            col = coordinates[col]
+            return row, col
+
+
 if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
