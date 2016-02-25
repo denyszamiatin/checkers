@@ -101,7 +101,7 @@ def print_board(board):
     print('   A   B   C   D   E   F   G   H')
 
 
-def get_input():  # Выбор шашки возвращает координаты
+def get_input():
     coordinates = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
     while True:
         try:
