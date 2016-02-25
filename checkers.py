@@ -143,12 +143,6 @@ def get_list_of_squares(board, checker_color):
    return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
