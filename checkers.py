@@ -80,7 +80,7 @@ def possibility_to_go(board, start_row, start_column, end_row, end_column):
         check_falling_into_field(board, start_row, start_column),
         check_falling_into_field(board, end_row, end_column),
         board[start_row][start_column] != EMPTY_CELL,
-        board[end_row][end_column] != EMPTY_CELL,
+        board[end_row][end_column] == EMPTY_CELL,
         end_row == start_row + get_direction_of_motion(
             board, start_column, start_row),
         end_column in (start_column + 1, start_column - 1)
@@ -118,6 +118,24 @@ def get_input():  # Выбор шашки возвращает координа�
         else:
             col = coordinates[col]
             return row, col
+
+
+def get_cells_after_take(board, start_row, start_column):
+    """
+    Get the cells after take
+    """
+    cells_after_take = []
+    end_rows = [start_row + 2, start_row + 2, start_row - 2, start_row - 2]
+    end_columns = [start_column - 2, start_column + 2, start_column - 2, start_column + 2]
+    for end_row, end_column in zip(end_rows, end_columns):
+        if all((
+            check_falling_into_field(board, start_row, start_column),
+            check_falling_into_field(board, end_row, end_column),
+            board[start_row][start_column] != EMPTY_CELL,
+            board[end_row][end_column] == EMPTY_CELL,
+            )):
+            cells_after_take.append([end_row,end_column])
+    return cells_after_take
 
 
 if __name__ == "__main__":
