@@ -87,15 +87,17 @@ def possibility_to_go(board, start_row, start_column, end_row, end_column):
     ))
 
 
-def print_board(checks):
+def print_board(board):
     BOARD_SIZE = 8
-    print(" " + "+---" * 8 + "+")
-    for i in checks:
+    print('   A   B   C   D   E   F   G   H')
+    print(' ', "+---" * 8, "+", sep='')
+    for row in board:
         print(BOARD_SIZE, end='')
-        for j in i:
-            print('| %s ' % j, end='')
+        for i in row:
+            print('| %s ' % i, end='')
+        print('|%d' % BOARD_SIZE)
         BOARD_SIZE -= 1
-        print("|\n" + " " + "+---" * 8 + "+")
+        print(' ', "+---" * 8, "+", sep='')
     print('   A   B   C   D   E   F   G   H')
 
 
@@ -146,4 +148,5 @@ def get_list_of_squares(board, checker_color):
 if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
-    pprint.pprint(board)
+    #pprint.pprint(board)
+    print_board(board)
