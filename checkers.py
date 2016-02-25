@@ -125,16 +125,17 @@ def get_cells_after_take(board, start_row, start_column):
     Get the cells after take
     """
     cells_after_take = []
-    end_rows = [start_row + 2, start_row + 2, start_row - 2, start_row - 2]
-    end_columns = [start_column - 2, start_column + 2, start_column - 2, start_column + 2]
-    for end_row, end_column in zip(end_rows, end_columns):
-        if all((
-            check_falling_into_field(board, start_row, start_column),
-            check_falling_into_field(board, end_row, end_column),
-            board[start_row][start_column] != EMPTY_CELL,
-            board[end_row][end_column] == EMPTY_CELL,
-            )):
-            cells_after_take.append([end_row,end_column])
+    end_rows = [start_row + 2, start_row - 2]
+    end_columns = [start_column + 2, start_column - 2]
+    for end_row in end_rows:
+        for end_column in end_columns:
+            if all((
+                check_falling_into_field(board, start_row, start_column),
+                check_falling_into_field(board, end_row, end_column),
+                board[start_row][start_column] != EMPTY_CELL,
+                board[end_row][end_column] == EMPTY_CELL,
+                )):
+                cells_after_take.append([end_row,end_column])
     return cells_after_take
 
 
