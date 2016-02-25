@@ -88,13 +88,13 @@ def possibility_to_go(board, start_row, start_column, end_row, end_column):
 
 
 def print_board(checks):
-    ind = 8
+    BOARD_SIZE = 8
     print(" " + "+---" * 8 + "+")
     for i in checks:
-        print(ind, end='')
+        print(BOARD_SIZE, end='')
         for j in i:
             print('| %s ' % j, end='')
-        ind -= 1
+        BOARD_SIZE -= 1
         print("|\n" + " " + "+---" * 8 + "+")
     print('   A   B   C   D   E   F   G   H')
 
