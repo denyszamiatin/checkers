@@ -105,9 +105,9 @@ def get_input():  # Выбор шашки возвращает координа�
     coordinates = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
     while True:
         try:
-            col = input('Столбец = ').upper()
-            row = int(input('Строка = ')) - 1
-            if col not in coordinates.keys():
+            column = input('Столбец = ').upper()
+            row = int(input('Строка = '))
+            if column not in coordinates.keys():
                 raise ValueError
             if row > 7:
                 raise ValueError
@@ -118,8 +118,9 @@ def get_input():  # Выбор шашки возвращает координа�
         except KeyError:
             print('Ужос')
         else:
-            col = coordinates[col]
-            return row, col
+            row = 8 - row
+            column = coordinates[column]
+            return row, column
 
 
 def get_cells_after_take(board, start_row, start_column):
@@ -148,5 +149,5 @@ def get_list_of_squares(board, checker_color):
 if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
-    #pprint.pprint(board)
     print_board(board)
+    print(get_input())
