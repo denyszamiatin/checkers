@@ -65,7 +65,7 @@ def get_direction_of_motion(board, row, column):
 
 
 def check_falling_into_field(board, row, column):
-    if row != abs(row) or column != abs(column):
+    if row < 0 or column < 0:
         return False
     else:
         try:
