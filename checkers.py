@@ -146,3 +146,4 @@ if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
     pprint.pprint(board)
+
