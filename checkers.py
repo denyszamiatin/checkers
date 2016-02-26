@@ -142,26 +142,6 @@ def get_cells_after_take(board, start_row, start_column):
     return cells_after_take
 
 
-def check_take(board, start_row, start_column, end_row, end_column):
-    """
-    Check the possibility of taking a checker
-    :param board:
-    :param start_row:
-    :param start_column:
-    :param end_row:
-    :param end_column:
-    :return: True
-    """
-    if all((
-        check_falling_into_field(board, start_row, start_column),
-        check_falling_into_field(board, end_row, end_column),
-        abs(end_row - start_row) == abs(end_column - start_column) == 1,
-        get_checker_color(board, start_row, start_column) != get_checker_color(board, end_row, end_column),
-        [end_row + end_row - start_row, end_column + end_column - start_column] \
-        in get_cells_after_take(board, start_row, start_column))):
-        return True
-
-
 def get_list_of_squares(board, checker_color):
     """
     Get the list of squares with checkers of definite color
@@ -169,7 +149,7 @@ def get_list_of_squares(board, checker_color):
     :param checker_color:
     :return: list
     """
-    return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
+   return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
 
 
 if __name__ == "__main__":
