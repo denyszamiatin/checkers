@@ -65,11 +65,14 @@ def get_direction_of_motion(board, row, column):
 
 
 def check_falling_into_field(board, row, column):
-    try:
-        board[row][column]
-    except IndexError:
+    if row != abs(row) or column != abs(column):
         return False
-    return True
+    else:
+        try:
+            board[row][column]
+        except IndexError:
+            return False
+        return True
 
 
 def possibility_to_go(board, start_row, start_column, end_row, end_column):
@@ -87,27 +90,25 @@ def possibility_to_go(board, start_row, start_column, end_row, end_column):
     ))
 
 
-def print_board(board):
-    BOARD_SIZE = 8
-    print('   A   B   C   D   E   F   G   H')
-    print(' ', "+---" * 8, "+", sep='')
-    for row in board:
-        print(BOARD_SIZE, end='')
-        for i in row:
-            print('| %s ' % i, end='')
-        print('|%d' % BOARD_SIZE)
-        BOARD_SIZE -= 1
-        print(' ', "+---" * 8, "+", sep='')
+def print_board(checks):
+    ind = 8
+    print(" " + "+---" * 8 + "+")
+    for i in checks:
+        print(ind, end='')
+        for j in i:
+            print('| %s ' % j, end='')
+        ind -= 1
+        print("|\n" + " " + "+---" * 8 + "+")
     print('   A   B   C   D   E   F   G   H')
 
 
-def get_input():
+def get_input():  # Выбор шашки возвращает координаты
     coordinates = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7}
     while True:
         try:
-            column = input('Столбец = ').upper()
-            row = int(input('Строка = '))
-            if column not in coordinates.keys():
+            col = input('Столбец = ').upper()
+            row = int(input('Строка = ')) - 1
+            if col not in coordinates.keys():
                 raise ValueError
             if row > 7:
                 raise ValueError
@@ -118,9 +119,8 @@ def get_input():
         except KeyError:
             print('Ужос')
         else:
-            row = 8 - row
-            column = coordinates[column]
-            return row, column
+            col = coordinates[col]
+            return row, col
 
 
 def get_cells_after_take(board, start_row, start_column):
@@ -142,12 +142,7 @@ def get_cells_after_take(board, start_row, start_column):
     return cells_after_take
 
 
-def get_list_of_squares(board, checker_color):
-   return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
-
-
 if __name__ == "__main__":
     board = set_board()
     set_checkers(board)
-    print_board(board)
-    print(get_input())
+    pprint.pprint(board)
