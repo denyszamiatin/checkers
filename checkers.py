@@ -143,6 +143,12 @@ def get_cells_after_take(board, start_row, start_column):
 
 
 def get_list_of_squares(board, checker_color):
+    """
+    Get the list of squares with checkers of definite color
+    :param board:
+    :param checker_color:
+    :return: list
+    """
    return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
 
 
