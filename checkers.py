@@ -64,12 +64,10 @@ def get_direction_of_motion(board, row, column):
     return 1 if get_checker_color(board, row, column) == BLACK else -1
 
 
-def check_falling_into_field(board, row, column):
-    try:
-        board[row][column]
-    except IndexError:
-        return False
-    return True
+def check_falling_into_field(row, column):
+    if 0 <= row < BOARD_SIZE and 0 <= column < BOARD_SIZE:
+        return True
+    return False
 
 
 def possibility_to_go(board, start_row, start_column, end_row, end_column):
@@ -77,8 +75,8 @@ def possibility_to_go(board, start_row, start_column, end_row, end_column):
     Check the possibility of movement on the specified square
     """
     return all((
-        check_falling_into_field(board, start_row, start_column),
-        check_falling_into_field(board, end_row, end_column),
+        check_falling_into_field(start_row, start_column),
+        check_falling_into_field(end_row, end_column),
         board[start_row][start_column] != EMPTY_CELL,
         board[end_row][end_column] == EMPTY_CELL,
         end_row == start_row + get_direction_of_motion(
@@ -127,18 +125,12 @@ def get_cells_after_take(board, start_row, start_column):
     """
     Get the cells after take
     """
-    cells_after_take = []
-    end_rows = [start_row + 2, start_row - 2]
-    end_columns = [start_column + 2, start_column - 2]
-    for end_row in end_rows:
-        for end_column in end_columns:
-            if all((
-                check_falling_into_field(board, start_row, start_column),
-                check_falling_into_field(board, end_row, end_column),
-                board[start_row][start_column] != EMPTY_CELL,
-                board[end_row][end_column] == EMPTY_CELL,
-                )):
-                cells_after_take.append([end_row,end_column])
+    cells_after_take = [[start_row + r_offset, start_column + c_offset]
+                        for r_offset in [-2, 2] for c_offset in [-2, 2]]
+    cells_after_take = [[row, column] for row, column in cells_after_take
+            if check_falling_into_field(row, column) and \
+                board[row][column] == EMPTY_CELL
+    ]
     return cells_after_take
 
 
@@ -152,16 +144,16 @@ def check_take(board, start_row, start_column, end_row, end_column):
     :param end_column:
     :return: True
     """
-    if all((
-        check_falling_into_field(board, start_row, start_column),
-        check_falling_into_field(board, end_row, end_column),
+    return all((
+        check_falling_into_field(start_row, start_column),
+        check_falling_into_field(end_row, end_column),
         board[start_row][start_column] != EMPTY_CELL,
         board[end_row][end_column] != EMPTY_CELL,
         abs(end_row - start_row) == abs(end_column - start_column) == 1,
-        get_checker_color(board, start_row, start_column) != get_checker_color(board, end_row, end_column),
+        get_checker_color(board, start_row, start_column) !=
+            get_checker_color(board, end_row, end_column),
         [end_row + end_row - start_row, end_column + end_column - start_column] \
-        in get_cells_after_take(board, start_row, start_column))):
-        return True
+        in get_cells_after_take(board, start_row, start_column)))
 
 
 def get_list_of_squares(board, checker_color):
@@ -171,7 +163,9 @@ def get_list_of_squares(board, checker_color):
     :param checker_color:
     :return: list
     """
-    return [[row, column] for row in range(8) for column in range(8) if board[row][column] == checker_color]
+    return [[row, column] for row in range(BOARD_SIZE)
+            for column in range(BOARD_SIZE)
+            if board[row][column] == checker_color]
 
 
 def get_list_of_takes(board, checker_color):
@@ -183,8 +177,8 @@ def get_list_of_takes(board, checker_color):
     """
     list_of_takes = []
     for [start_row, start_column] in get_list_of_squares(board, checker_color):
-        for end_row in range(8):
-                for end_column in range(8):
+        for end_row in range(BOARD_SIZE):
+                for end_column in range(BOARD_SIZE):
                    if check_take(start_row, start_column, end_row, end_column):
                        list_of_takes.append([end_row, end_column])
     return list_of_takes
