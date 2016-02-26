@@ -150,7 +150,7 @@ def check_take(board, start_row, start_column, end_row, end_column):
     :param start_column:
     :param end_row:
     :param end_column:
-    :return:
+    :return: True
     """
     if all((
         check_falling_into_field(board, start_row, start_column),
