@@ -107,7 +107,7 @@ def get_input():
             row = int(input('Строка = '))
             if column not in coordinates.keys():
                 raise ValueError
-            if row > 7:
+            if row > 8:
                 raise ValueError
             if row < 0:
                 raise ValueError
@@ -128,9 +128,19 @@ def get_cells_after_take(board, start_row, start_column):
     cells_after_take = [[start_row + r_offset, start_column + c_offset]
                         for r_offset in [-2, 2] for c_offset in [-2, 2]]
     cells_after_take = [[row, column] for row, column in cells_after_take
-            if check_falling_into_field(row, column) and \
-                board[row][column] == EMPTY_CELL
-    ]
+                        if check_falling_into_field(row, column) and board[row][column] == EMPTY_CELL
+                        ]
+    return cells_after_take
+
+
+def get_cells_after_take2(board, row, column):
+    CELLS = ((-1, -1), (-1, 1), (1, 1), (1, -1))
+    cells_after_take = [[row + way[0] * 2, column + way[1] * 2] for way in CELLS if
+                        board[row + way[0]][column + way[1]] ==
+                        enemy_color(board, row, column) and check_falling_into_field(row + way[0] * 2,
+                                                                                      column + way[1] * 2)
+                        and board[row + way[0] * 2][column + way[1] * 2] == EMPTY_CELL
+                        ]
     return cells_after_take
 
 
@@ -151,7 +161,7 @@ def check_take(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] != EMPTY_CELL,
         abs(end_row - start_row) == abs(end_column - start_column) == 1,
         get_checker_color(board, start_row, start_column) !=
-            get_checker_color(board, end_row, end_column),
+        get_checker_color(board, end_row, end_column),
         [end_row + end_row - start_row, end_column + end_column - start_column] \
         in get_cells_after_take(board, start_row, start_column)))
 
@@ -178,14 +188,45 @@ def get_list_of_takes(board, checker_color):
     list_of_takes = []
     for [start_row, start_column] in get_list_of_squares(board, checker_color):
         for end_row in range(BOARD_SIZE):
-                for end_column in range(BOARD_SIZE):
-                   if check_take(start_row, start_column, end_row, end_column):
-                       list_of_takes.append([end_row, end_column])
+            for end_column in range(BOARD_SIZE):
+                if check_take(board, start_row, start_column, end_row, end_column):
+                    list_of_takes.append([end_row, end_column])
     return list_of_takes
 
 
+def enemy_color(board, row, column):
+    return WHITE_SHORT if board[row][column] == BLACK_SHORT else BLACK_SHORT
+
+
+def is_fight(board, color):  # Есть ли бой
+    enemy = set()
+    CELLS = ((-1, -1), (-1, 1), (1, 1), (1, -1))
+    for row in range(BOARD_SIZE):
+        for column in range(BOARD_SIZE):
+            for i in CELLS:
+                if board[row][column] == color and \
+                        check_falling_into_field(row - i[0] * 2, column - i[1] * 2) and \
+                        board[row - i[0]][column - i[1]] == enemy_color(board, row, column) and \
+                        board[row - i[0] * 2][column - i[1] * 2] == EMPTY_CELL:
+                    enemy.add((row, column))
+    return enemy
+
+
 if __name__ == "__main__":
-    board = set_board()
-    set_checkers(board)
+    board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
+             ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
+             [' ', 'W', ' ', 'W', ' ', 'W', ' ', ' '],
+             [' ', ' ', ' ', ' ', 'B', ' ', ' ', ' '],
+             [' ', 'B', ' ', 'W', ' ', ' ', ' ', 'W'],
+             ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
+    # board = set_board()
+    # set_checkers(board)
     print_board(board)
-    print(get_input())
+    print(is_fight(board, WHITE_SHORT))
+    row, column = get_input()
+    print(board[row][column])
+    print(get_list_of_takes(board, WHITE))
+    print(get_list_of_squares(board, WHITE))
+    print(get_cells_after_take2(board, row, column))
