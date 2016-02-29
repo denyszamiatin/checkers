@@ -158,17 +158,15 @@ def check_take(board, start_row, start_column, end_row, end_column):
         check_falling_into_field(start_row, start_column),
         check_falling_into_field(end_row, end_column),
         board[start_row][start_column] != EMPTY_CELL,
-        board[end_row][end_column] != EMPTY_CELL,
-        abs(end_row - start_row) == abs(end_column - start_column) == 1,
-        get_checker_color(board, start_row, start_column) !=
-        get_checker_color(board, end_row, end_column),
-        [end_row + end_row - start_row, end_column + end_column - start_column] \
-        in get_cells_after_take(board, start_row, start_column)))
+        [end_row, end_column] in get_cells_after_take(board, start_row, start_column),
+        board[int((end_row + start_row) / 2)] [int((end_column + start_column) / 2)] != EMPTY_CELL,
+        get_checker_color(start_row, start_column) !=
+        get_checker_color(int((end_row + start_row) / 2), int((end_column + start_column) / 2))))
 
 
-def get_list_of_squares(board, checker_color):
+def get_list_of_cells(board, checker_color):
     """
-    Return the list of squares with checkers of definite color
+    Return the list of cells with checkers of definite color
     :param board:
     :param checker_color:
     :return: list
@@ -186,11 +184,11 @@ def get_list_of_takes(board, checker_color):
     :return:
     """
     list_of_takes = []
-    for [start_row, start_column] in get_list_of_squares(board, checker_color):
-        for end_row in range(BOARD_SIZE):
-            for end_column in range(BOARD_SIZE):
-                if check_take(board, start_row, start_column, end_row, end_column):
-                    list_of_takes.append([end_row, end_column])
+    list_of_cells = get_list_of_cells(board, checker_color)
+    for [start_row, start_column] in list_of_cells:
+        for [end_row, end_column] in get_cells_after_take(board, start_row, start_column):
+                   if check_take(start_row, start_column, end_row, end_column):
+                       list_of_takes.append([end_row, end_column])
     return list_of_takes
 
 
