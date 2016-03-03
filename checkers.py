@@ -29,6 +29,7 @@ def put_checks_on_row(row, start, CHECKS_COLOR):
 
 def set_checkers(board):
     """
+    :param board: list[len(8)][len(8)]
     Set checks on board.
     >>> set_checkers([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
@@ -48,6 +49,14 @@ def get_checker_color(board, row, column):
     :param row: coordinate (0...7)
     :param board: checkers board
     :return: BLACK or WHITE
+    >>> get_checker_color([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 0, 0)
+    Traceback (most recent call last):
+    ...
+    ValueError
+    >>> get_checker_color([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 7)
+    'black'
+    >>> get_checker_color([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 6, 3)
+    'white'
     """
     if board[row][column] == EMPTY_CELL:
         raise ValueError
@@ -210,8 +219,11 @@ def is_fight(board, color):  # Есть ли бой
     return enemy
 
 
-'''
+
 if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+'''
     board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
              ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -229,4 +241,4 @@ if __name__ == "__main__":
     print(get_list_of_takes(board, WHITE))
     print(get_list_of_squares(board, WHITE))
     print(get_cells_after_take2(board, row, column))
-    '''
+'''
