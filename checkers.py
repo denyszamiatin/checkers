@@ -248,6 +248,24 @@ def make_move(board, start_row, start_column, end_row, end_column):
         print('Move impossible')
 
 
+def make_take(board, start_row, start_column, end_row, end_column):
+    """
+    Function to make take if possible, otherwise get a message
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    :return:
+    """
+    if check_take(board, start_row, start_column, end_row, end_column):
+        board[end_row][end_column] = board[start_row][start_column]
+        board[start_row][start_column] = EMPTY_CELL
+        board[int((end_row + start_row) / 2)][int((end_column + start_column) / 2)] = EMPTY_CELL
+    else:
+        print('Take impossible')
+
+
 
 
 if __name__ == "__main__":
