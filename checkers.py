@@ -231,6 +231,24 @@ def is_fight(board, color):  # Есть ли бой
     return enemy
 
 
+def make_move(board, start_row, start_column, end_row, end_column):
+    """
+    Function to make move if possible, otherwise get a message
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    :return:
+    """
+    if possibility_to_go(board, start_row, start_column, end_row, end_column):
+        board[end_row][end_column] = board[start_row][start_column]
+        board[start_row][start_column] = EMPTY_CELL
+    else:
+        print('Move impossible')
+
+
+
 
 if __name__ == "__main__":
     import doctest
