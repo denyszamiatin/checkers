@@ -82,16 +82,22 @@ def check_falling_into_field(row, column):
 def possibility_to_go(board, start_row, start_column, end_row, end_column):
     """
     Check the possibility of movement on the specified square
+    >>>possibility_to_go([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 0, 1, 1, 0)
+    False
+    >>>possibility_to_go([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 7, 3, 6)
+    True
+    >>>possibility_to_go([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 0, 5, 7, 4)
+    False
+    >>>possibility_to_go([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 6, 4, 7)
+    True
     """
-    return all((
-        check_falling_into_field(start_row, start_column),
-        check_falling_into_field(end_row, end_column),
-        board[start_row][start_column] != EMPTY_CELL,
-        board[end_row][end_column] == EMPTY_CELL,
-        end_row == start_row + get_direction_of_motion(
-            board, start_column, start_row),
-        end_column in (start_column + 1, start_column - 1)
-    ))
+    return all((check_falling_into_field(start_row, start_column),
+               check_falling_into_field(end_row, end_column),
+               board[start_row][start_column] != EMPTY_CELL,
+               board[end_row][end_column] == EMPTY_CELL,
+               end_row == start_row + get_direction_of_motion(board, start_row, start_column),
+               end_column in (start_column + 1, start_column - 1)
+               ))
 
 
 def print_board(board):
@@ -219,10 +225,11 @@ def is_fight(board, color):  # Есть ли бой
     return enemy
 
 
-
+'''
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+'''
 '''
     board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
              ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
