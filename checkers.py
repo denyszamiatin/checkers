@@ -30,15 +30,15 @@ def put_checks_on_row(row, start, CHECKS_COLOR):
 def set_checkers(board):
     """
     Set checks on board.
+    >>> set_checkers([[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']])
+    [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
     """
     for row_number, row in enumerate(board):
         if 2 < row_number < 5:
             continue
-        put_checks_on_row(
-            row,
-            (row_number + 1) % 2,
-            BLACK_SHORT if row_number < 3 else WHITE_SHORT
-        )
+        else:
+            put_checks_on_row(row, (row_number + 1) % 2, BLACK_SHORT if row_number < 3 else WHITE_SHORT)
+    return board
 
 
 def get_checker_color(board, row, column):
@@ -210,6 +210,7 @@ def is_fight(board, color):  # Есть ли бой
     return enemy
 
 
+'''
 if __name__ == "__main__":
     board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
              ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
@@ -228,3 +229,4 @@ if __name__ == "__main__":
     print(get_list_of_takes(board, WHITE))
     print(get_list_of_squares(board, WHITE))
     print(get_cells_after_take2(board, row, column))
+    '''
