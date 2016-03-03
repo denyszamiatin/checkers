@@ -7,6 +7,9 @@ BLACK_SHORT = BLACK[0].upper()
 WHITE_SHORT = WHITE[0].upper()
 EMPTY_CELL = ' '
 
+taken_black = 0
+taken_white = 0
+
 
 def set_board():
     return [[EMPTY_CELL] * BOARD_SIZE for j in range(BOARD_SIZE)]
@@ -154,17 +157,6 @@ def get_cells_after_take(board, start_row, start_column):
     return cells_after_take
 
 
-def get_cells_after_take2(board, row, column):
-    CELLS = ((-1, -1), (-1, 1), (1, 1), (1, -1))
-    cells_after_take = [[row + way[0] * 2, column + way[1] * 2] for way in CELLS if
-                        board[row + way[0]][column + way[1]] ==
-                        enemy_color(board, row, column) and check_falling_into_field(row + way[0] * 2,
-                                                                                      column + way[1] * 2)
-                        and board[row + way[0] * 2][column + way[1] * 2] == EMPTY_CELL
-                        ]
-    return cells_after_take
-
-
 def check_take(board, start_row, start_column, end_row, end_column):
     """
     Check the possibility of taking a checker
@@ -181,8 +173,9 @@ def check_take(board, start_row, start_column, end_row, end_column):
         board[start_row][start_column] != EMPTY_CELL,
         [end_row, end_column] in get_cells_after_take(board, start_row, start_column),
         board[int((end_row + start_row) / 2)] [int((end_column + start_column) / 2)] != EMPTY_CELL,
-        get_checker_color(start_row, start_column) !=
-        get_checker_color(int((end_row + start_row) / 2), int((end_column + start_column) / 2))))
+        get_checker_color(board, start_row, start_column) !=
+        get_checker_color(board, int((end_row + start_row) / 2), int((end_column + start_column) / 2))
+    ))
 
 
 def get_list_of_cells(board, checker_color):
@@ -244,6 +237,7 @@ def make_move(board, start_row, start_column, end_row, end_column):
     if possibility_to_go(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
+        return board
     else:
         print('Move impossible')
 
@@ -259,13 +253,39 @@ def make_take(board, start_row, start_column, end_row, end_column):
     :return:
     """
     if check_take(board, start_row, start_column, end_row, end_column):
+        count_the_number_of_checkers_taken(board, int((end_row + start_row) / 2), int((end_column + start_column) / 2))
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
         board[int((end_row + start_row) / 2)][int((end_column + start_column) / 2)] = EMPTY_CELL
+        return board
     else:
         print('Take impossible')
 
 
+def count_the_number_of_checkers_taken(board, row, column):
+    '''
+    Increases the number of checkers taken
+    :param board:
+    :param row:
+    :param column:
+    >>> count_the_number_of_checkers_taken([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 0, 0)
+    Traceback (most recent call last):
+    ...
+    ValueError
+    >>> count_the_number_of_checkers_taken([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 7)
+
+    >>> count_the_number_of_checkers_taken([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 6, 3)
+
+    '''
+    if get_checker_color(board, row, column) == BLACK:
+        global taken_black
+        taken_black += 1
+        #print('taken_black: ', taken_black)
+
+    else:
+        global taken_white
+        taken_white += 1
+        #print('taken_white: ', taken_white)
 
 
 if __name__ == "__main__":
