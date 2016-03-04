@@ -1,4 +1,5 @@
 import pprint
+import copy
 
 BOARD_SIZE = 8
 BLACK = 'black'
@@ -167,15 +168,15 @@ def check_take(board, start_row, start_column, end_row, end_column):
     :param end_column:
     :return: True
     """
-    return all((
-        check_falling_into_field(start_row, start_column),
-        check_falling_into_field(end_row, end_column),
-        board[start_row][start_column] != EMPTY_CELL,
-        [end_row, end_column] in get_cells_after_take(board, start_row, start_column),
-        board[int((end_row + start_row) / 2)] [int((end_column + start_column) / 2)] != EMPTY_CELL,
-        get_checker_color(board, start_row, start_column) !=
-        get_checker_color(board, int((end_row + start_row) / 2), int((end_column + start_column) / 2))
-    ))
+    return (
+        check_falling_into_field(start_row, start_column) and
+        check_falling_into_field(end_row, end_column) and
+        board[start_row][start_column] != EMPTY_CELL and
+        [end_row, end_column] in get_cells_after_take(board, start_row, start_column) and
+        board[int((end_row + start_row) / 2)] [int((end_column + start_column) / 2)] != EMPTY_CELL and
+        get_checker_color(board, start_row, start_column) != get_checker_color(board, int((end_row + start_row) / 2), int((end_column + start_column) / 2))
+    )
+
 
 
 def get_list_of_cells(board, checker_color):
@@ -253,7 +254,6 @@ def make_take(board, start_row, start_column, end_row, end_column):
     :return:
     """
     if check_take(board, start_row, start_column, end_row, end_column):
-        count_the_number_of_checkers_taken(board, int((end_row + start_row) / 2), int((end_column + start_column) / 2))
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
         board[int((end_row + start_row) / 2)][int((end_column + start_column) / 2)] = EMPTY_CELL
@@ -287,22 +287,45 @@ def count_the_number_of_checkers_taken(board, row, column):
         taken_white += 1
         #print('taken_white: ', taken_white)
 
+def check_again_take(board, start_row, start_column, end_row, end_column):
+    '''
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    False
+    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    True
+    '''
+    if check_take(board, start_row, start_column, end_row, end_column):
+        board_after_take = copy.deepcopy(board)
+        board_after_take = make_take(board_after_take, start_row, start_column, end_row, end_column)
+        start_row, start_column = end_row, end_column
+        for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
+            if check_take(board_after_take, start_row, start_column, end_row, end_column):
+                return True
+    return False
+
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 '''
-    board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
-             ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
-             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
-             [' ', 'W', ' ', 'W', ' ', 'W', ' ', ' '],
-             [' ', ' ', ' ', ' ', 'B', ' ', ' ', ' '],
-             [' ', 'B', ' ', 'W', ' ', ' ', ' ', 'W'],
-             ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
-    # board = set_board()
-    # set_checkers(board)
+    #test for check_again_take
+    board = set_board()
+    board = set_checkers(board)
+    board = make_move(board, 2, 1, 3, 2)
+    pprint.pprint(board)
+    board = make_move(board, 3, 2, 4, 1)
+    pprint.pprint(board)
+    board = make_move(board, 1, 0, 2, 1)
+    pprint.pprint(board)
+    print('check_again_take',check_again_take(board, 5, 0, 3, 2))
+    pprint.pprint(board)
+
     print_board(board)
     print(is_fight(board, WHITE_SHORT))
     row, column = get_input()
