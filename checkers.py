@@ -23,13 +23,13 @@ def color_of_square(row, column):
     :param column: coordinate (0...7)
     :return: BLACK or WHITE
 
-    >>> color_of_square(5, 0)
+    >>> color_of_square(5, 5)
     WHITE
-    >>> color_of_square(2, 5)
+    >>> color_of_square(5, 0)
     BLACK
 
     """
-    return WHITE if (row + column) % 2 else BLACK
+    return BLACK if (row + column) % 2 else WHITE
 
 
 def put_checks_on_row(row, start, CHECKS_COLOR):
@@ -79,11 +79,29 @@ def get_direction_of_motion(board, row, column):
     :param row: coordinate (0...7)
     :param column: coordinate (0...7)
     :return:
+
+    >>>get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 2)
+    -1
+    >>>get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1)
+    1
+
     """
     return 1 if get_checker_color(board, row, column) == BLACK else -1
 
 
 def check_falling_into_field(row, column):
+    """
+
+    :param row:
+    :param column:
+    :return: True or False
+
+    >>>check_falling_into_field(3, 7)
+    True
+    >>>check_falling_into_field(5, 9)
+    False
+
+    """
     if 0 <= row < BOARD_SIZE and 0 <= column < BOARD_SIZE:
         return True
     return False
