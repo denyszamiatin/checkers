@@ -24,6 +24,8 @@ def color_of_square(row, column):
 
     >>> color_of_square(5, 0)
     WHITE
+    >>> color_of_square(2, 5)
+    BLACK
 
     """
     return WHITE if (row + column) % 2 else BLACK
