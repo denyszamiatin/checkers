@@ -8,6 +8,8 @@ BLACK_SHORT = BLACK[0].upper()
 WHITE_SHORT = WHITE[0].upper()
 EMPTY_CELL = ' '
 taken = {'taken_black': 0, 'taken_white': 0}
+BLACK_KING = 'bk'
+WHITE_KING = 'wk'
 
 observers = []
 def use_observers():
@@ -360,6 +362,22 @@ def check_again_take(board, start_row, start_column, end_row, end_column):
             if check_take(board_after_take, start_row, start_column, end_row, end_column):
                 return True
     return False
+
+
+def turn_into_king(board, row, column):
+    """
+    Function that turns checker into a king
+    :param board:
+    :param row:
+    :param column:
+    :return:
+    """
+    if check_falling_into_field(row, column):
+        if board[row][column] == BLACK_SHORT and row == BOARD_SIZE - 1:
+            board[row][column] = BLACK_KING
+        elif board[row][column] == WHITE_SHORT and row == 0:
+            board[row][column] = WHITE_KING
+
 
 '''
 if __name__ == "__main__":
