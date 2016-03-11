@@ -395,6 +395,20 @@ def check_kings_move(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] == EMPTY_CELL and
         abs(end_row - start_row) == abs(end_column - start_column))
 
+
+def make_kings_move(board, start_row, start_column, end_row, end_column):
+    """
+    Function that makes king's move if possible
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    :return:
+    """
+    if check_kings_move(board, start_row, start_column, end_row, end_column):
+        board[end_row][end_column] = WHITE_KING if board[start_row][start_column] == WHITE_KING else BLACK_KING
+        board[start_row][start_column] = EMPTY_CELL
 '''
 if __name__ == "__main__":
     import doctest
