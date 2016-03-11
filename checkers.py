@@ -9,6 +9,18 @@ WHITE_SHORT = WHITE[0].upper()
 EMPTY_CELL = ' '
 taken = {'taken_black': 0, 'taken_white': 0}
 
+observers = []
+def use_observers():
+    for observer in observers:
+        return observer
+
+def on_observer(observer):
+    observers.append(observer)
+
+def off_observer(observer):
+    observers.remove(observer)
+
+
 
 def set_board():
     return [[EMPTY_CELL] * BOARD_SIZE for j in range(BOARD_SIZE)]
