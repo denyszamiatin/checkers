@@ -361,10 +361,38 @@ def check_again_take(board, start_row, start_column, end_row, end_column):
                 return True
     return False
 
+def check_again_take_2(board, start_row, start_column, end_row, end_column):
+    '''
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    False
+    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    True
+    '''
+    result = 0
+    if check_take(board, start_row, start_column, end_row, end_column):
+        pprint.pprint(board)
+        board_after_take = copy.deepcopy(board)
+        make_take(board_after_take, start_row, start_column, end_row, end_column)
+        pprint.pprint(board_after_take)
+        start_row, start_column = end_row, end_column
+        print('start_row, start_column', start_row, start_column)
+        print('get_cells_after_take', get_cells_after_take(board_after_take, start_row, start_column))
+        for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
+            if check_take(board_after_take, start_row, start_column, end_row, end_column):
+                print(result)
+                result = 1 + check_again_take_2(board_after_take, start_row, start_column, end_row, end_column)
+
+    return result
+
 '''
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    #import doctest
+    #doctest.testmod()
 
 
     #test for check_again_take
@@ -377,8 +405,16 @@ if __name__ == "__main__":
     make_move(board, 3, 6, 4, 7)
     make_move(board, 1, 4, 2, 5)
 
-    print('check_again_take', check_again_take_2(board, 5, 0, 3, 2))
-#    pprint.pprint(board)
+    make_move(board, 2, 3, 3, 4)
+    make_move(board, 3, 4, 4, 5)
+    make_move(board, 1, 2, 2, 3)
+    make_move(board, 2, 7, 3, 6)
+    make_move(board, 1, 6, 2, 7)
+
+
+    #print('check_again_take', check_again_take_2(board, 5, 0, 3, 2))
+    print('check_again_take', check_again_take_2(board, 5, 6, 3, 4))
+    #pprint.pprint(board)
 
 
     make_take(board, 5, 0, 3, 2)
