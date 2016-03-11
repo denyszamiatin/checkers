@@ -379,6 +379,22 @@ def turn_into_king(board, row, column):
             board[row][column] = WHITE_KING
 
 
+def check_kings_move(board, start_row, start_column, end_row, end_column):
+    """
+    Function that checks king's move
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    :return: True or False
+    """
+    return (
+        check_falling_into_field(end_row, end_column) and
+        board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING and
+        board[end_row][end_column] == EMPTY_CELL and
+        abs(end_row - start_row) == abs(end_column - start_column))
+
 '''
 if __name__ == "__main__":
     import doctest
