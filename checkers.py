@@ -7,9 +7,7 @@ WHITE = 'white'
 BLACK_SHORT = BLACK[0].upper()
 WHITE_SHORT = WHITE[0].upper()
 EMPTY_CELL = ' '
-
-taken_black = 0
-taken_white = 0
+taken = {'taken_black': 0, 'taken_white': 0}
 
 
 def set_board():
@@ -24,10 +22,9 @@ def color_of_square(row, column):
     :return: BLACK or WHITE
 
     >>> color_of_square(5, 5)
-    WHITE
+    'white'
     >>> color_of_square(5, 0)
-    BLACK
-
+    'black'
     """
     return BLACK if (row + column) % 2 else WHITE
 
@@ -80,11 +77,10 @@ def get_direction_of_motion(board, row, column):
     :param column: coordinate (0...7)
     :return:
 
-    >>>get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 2)
+    >>> get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 2)
     -1
-    >>>get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1)
+    >>> get_direction_of_motion([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1)
     1
-
     """
     return 1 if get_checker_color(board, row, column) == BLACK else -1
 
@@ -96,11 +92,10 @@ def check_falling_into_field(row, column):
     :param column:
     :return: True or False
 
-    >>>check_falling_into_field(3, 7)
+    >>> check_falling_into_field(3, 7)
     True
-    >>>check_falling_into_field(5, 9)
+    >>> check_falling_into_field(5, 9)
     False
-
     """
     if 0 <= row < BOARD_SIZE and 0 <= column < BOARD_SIZE:
         return True
@@ -177,8 +172,7 @@ def get_cells_after_take(board, start_row, start_column):
     cells_after_take = [[start_row + r_offset, start_column + c_offset]
                         for r_offset in [-2, 2] for c_offset in [-2, 2]]
     cells_after_take = [[row, column] for row, column in cells_after_take
-                        if check_falling_into_field(row, column) and board[row][column] == EMPTY_CELL
-                        ]
+                        if check_falling_into_field(row, column) and board[row][column] == EMPTY_CELL]
     return cells_after_take
 
 
@@ -192,9 +186,9 @@ def check_take(board, start_row, start_column, end_row, end_column):
     :param end_column:
     :return: True
 
-    >>>check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
+    >>> check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
     True
-    >>>check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 3, 6)
+    >>> check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 3, 6)
     False
 
     """
@@ -234,11 +228,10 @@ def get_list_of_takes(board, checker_color):
     :param checker_color:
     :return:
 
-    >>>get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], WHITE_SHORT)
+    >>> get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], WHITE_SHORT)
     []
-    >>>get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], BLACK_SHORT)
+    >>> get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], BLACK_SHORT)
     [[4, 3], [4, 1]]
-
     """
     list_of_takes = []
     list_of_cells = get_list_of_cells(board, checker_color)
@@ -276,17 +269,15 @@ def make_move(board, start_row, start_column, end_row, end_column):
     :param end_row:
     :param end_column:
     :return:
-
-    >>>make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1, 4, 3)
-    'Move impossible'
-    >>>make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 4, 5)
+    >>> make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1, 4, 3)
+    Move impossible
+    >>> make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 4, 5)
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', 'W', ' ', ' '], ['W', ' ', 'W', ' ', ' ', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
-
-
     """
     if possibility_to_go(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
+        return board
     else:
         print('Move impossible')
 
@@ -300,17 +291,16 @@ def make_take(board, start_row, start_column, end_row, end_column):
     :param end_row:
     :param end_column:
     :return:
-
-    >>>make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
+    >>> make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
-    >>>make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 5, 4, 7)
-    'Take impossible'
-
+    >>> make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 5, 4, 7)
+    Take impossible
     """
     if check_take(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
         board[int((end_row + start_row) / 2)][int((end_column + start_column) / 2)] = EMPTY_CELL
+        return board
     else:
         print('Take impossible')
 
@@ -331,14 +321,12 @@ def count_the_number_of_checkers_taken(board, row, column):
 
     '''
     if get_checker_color(board, row, column) == BLACK:
-        global taken_black
-        taken_black += 1
-        #print('taken_black: ', taken_black)
+        taken['taken_black'] += 1
+        #print('taken_black: ', taken['taken_black'])
 
     else:
-        global taken_white
-        taken_white += 1
-        #print('taken_white: ', taken_white)
+        taken['taken_white'] += 1
+        #print('taken_white: ', taken['taken_white'])
 
 def check_again_take(board, start_row, start_column, end_row, end_column):
     '''
@@ -354,30 +342,39 @@ def check_again_take(board, start_row, start_column, end_row, end_column):
     '''
     if check_take(board, start_row, start_column, end_row, end_column):
         board_after_take = copy.deepcopy(board)
-        board_after_take = make_take(board_after_take, start_row, start_column, end_row, end_column)
+        make_take(board_after_take, start_row, start_column, end_row, end_column)
         start_row, start_column = end_row, end_column
         for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
             if check_take(board_after_take, start_row, start_column, end_row, end_column):
                 return True
     return False
 
-
+'''
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
-'''
+
     #test for check_again_take
     board = set_board()
-    board = set_checkers(board)
-    board = make_move(board, 2, 1, 3, 2)
+    set_checkers(board)
+    make_move(board, 2, 1, 3, 2)
+    make_move(board, 3, 2, 4, 1)
+    make_move(board, 1, 0, 2, 1)
+    make_move(board, 2, 5, 3, 6)
+    make_move(board, 3, 6, 4, 7)
+    make_move(board, 1, 4, 2, 5)
+
+    print('check_again_take', check_again_take_2(board, 5, 0, 3, 2))
+#    pprint.pprint(board)
+
+
+    make_take(board, 5, 0, 3, 2)
     pprint.pprint(board)
-    board = make_move(board, 3, 2, 4, 1)
+    make_take(board, 3, 2, 1, 0)
     pprint.pprint(board)
-    board = make_move(board, 1, 0, 2, 1)
-    pprint.pprint(board)
-    print('check_again_take',check_again_take(board, 5, 0, 3, 2))
-    pprint.pprint(board)
+    print(taken)
+
 
     print_board(board)
     print(is_fight(board, WHITE_SHORT))
