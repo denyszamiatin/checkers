@@ -12,9 +12,13 @@ BLACK_KING = 'bk'
 WHITE_KING = 'wk'
 
 observers = []
-def use_observers():
-    for observer in observers:
-        return observer
+def use_observers(f):
+    def wraper(*args, **kwargs):
+        result = f(*args, **kwargs)
+        for observer in observers:
+            observer()
+        return result
+    return wraper
 
 def on_observer(observer):
     observers.append(observer)
@@ -295,7 +299,7 @@ def make_move(board, start_row, start_column, end_row, end_column):
     else:
         print('Move impossible')
 
-
+@use_observers
 def make_take(board, start_row, start_column, end_row, end_column):
     """
     Function to make take if possible, otherwise get a message
@@ -363,34 +367,6 @@ def check_again_take(board, start_row, start_column, end_row, end_column):
                 return True
     return False
 
-def check_again_take_2(board, start_row, start_column, end_row, end_column):
-    '''
-    :param board:
-    :param start_row:
-    :param start_column:
-    :param end_row:
-    :param end_column:
-    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
-    False
-    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
-    True
-    '''
-    result = 0
-    if check_take(board, start_row, start_column, end_row, end_column):
-        pprint.pprint(board)
-        board_after_take = copy.deepcopy(board)
-        make_take(board_after_take, start_row, start_column, end_row, end_column)
-        pprint.pprint(board_after_take)
-        start_row, start_column = end_row, end_column
-        print('start_row, start_column', start_row, start_column)
-        print('get_cells_after_take', get_cells_after_take(board_after_take, start_row, start_column))
-        for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
-            if check_take(board_after_take, start_row, start_column, end_row, end_column):
-                print(result)
-                result = 1 + check_again_take_2(board_after_take, start_row, start_column, end_row, end_column)
-
-    return result
-
 
 def turn_into_king(board, row, column):
     """
@@ -437,6 +413,8 @@ def make_kings_move(board, start_row, start_column, end_row, end_column):
     if check_kings_move(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = WHITE_KING if board[start_row][start_column] == WHITE_KING else BLACK_KING
         board[start_row][start_column] = EMPTY_CELL
+
+
 '''
 if __name__ == "__main__":
     #import doctest
