@@ -382,6 +382,8 @@ def turn_into_king(board, row, column):
         elif board[row][column] == WHITE_SHORT and row == 0:
             board[row][column] = WHITE_KING
 
+def check_on_diagonal(start_row, start_column, end_row, end_column):
+    return True if abs(end_row - start_row) == abs(end_column - start_column) else False
 
 def check_kings_move(board, start_row, start_column, end_row, end_column):
     """
@@ -397,7 +399,7 @@ def check_kings_move(board, start_row, start_column, end_row, end_column):
         check_falling_into_field(end_row, end_column) and
         board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING and
         board[end_row][end_column] == EMPTY_CELL and
-        abs(end_row - start_row) == abs(end_column - start_column))
+        check_on_diagonal(start_row, start_column, end_row, end_column))
 
 
 def make_kings_move(board, start_row, start_column, end_row, end_column):
@@ -415,15 +417,67 @@ def make_kings_move(board, start_row, start_column, end_row, end_column):
         board[start_row][start_column] = EMPTY_CELL
 
 
-'''
+def get_cells_diagonal(board, start_row, start_column, end_row, end_column):
+    diagonal = []
+    for number_row, row in enumerate(board):
+        for number_column, cell in enumerate(row):
+            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
+            check_on_diagonal(number_row, number_column, end_row, end_column) and \
+            (start_row < number_row <= end_row or end_row <= number_row < start_row):
+                diagonal.append(cell)
+    return diagonal
+
+
+def check_not_couple_in_diagonal(board, start_row, start_column, end_row, end_column):
+    diagonal = get_cells_diagonal(board, start_row, start_column, end_row, end_column)
+    try:
+        for n, cell in enumerate(diagonal):
+            if cell == diagonal[n + 1] and cell != EMPTY_CELL:
+                print(cell, diagonal[n + 1])
+                return False
+    finally:
+        return True
+
+
+def check_not_empty_diagonal(board, start_row, start_column, end_row, end_column):
+    diagonal = get_cells_diagonal(board, start_row, start_column, end_row, end_column)
+    return False if diagonal.count(EMPTY_CELL) == len(diagonal)else True
+
+
+def check_kings_take(board, start_row, start_column, end_row, end_column):
+    """
+    Check the possibility of taking a checker
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    :return: True
+
+    """
+    return (
+        check_falling_into_field(start_row, start_column) and
+        check_falling_into_field(end_row, end_column) and
+        (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and
+        board[end_row][end_column] == EMPTY_CELL and
+        check_on_diagonal(start_row, start_column, end_row, end_column) and
+        get_checker_color(board, start_row, start_column) not in get_cells_diagonal(board, start_row, start_column, end_row, end_column) and
+        check_not_empty_diagonal(board, start_row, start_column, end_row, end_column) and
+        check_not_couple_in_diagonal(board, start_row, start_column, end_row, end_column)
+
+    )
+
+
 if __name__ == "__main__":
     #import doctest
     #doctest.testmod()
 
 
-    #test for check_again_take
     board = set_board()
     set_checkers(board)
+    pprint.pprint(board)
+
+'''
     make_move(board, 2, 1, 3, 2)
     make_move(board, 3, 2, 4, 1)
     make_move(board, 1, 0, 2, 1)
