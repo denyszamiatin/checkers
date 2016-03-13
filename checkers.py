@@ -474,6 +474,7 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
         get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, end_row, end_column) and
+        board[start_row][start_column] not in get_cells_way(board, start_row, start_column, end_row, end_column) and
         check_one_cell_on_way(board, start_row, start_column, end_row, end_column)
     )
 
