@@ -83,9 +83,14 @@ def get_checker_color(board, row, column):
     >>> get_checker_color([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 6, 3)
     'white'
     """
+    print('get_checker_color')
     if board[row][column] == EMPTY_CELL:
         raise ValueError
-    return BLACK if board[row][column] == BLACK_SHORT else WHITE
+    return BLACK if (board[row][column] == BLACK_SHORT or board[row][column] == BLACK_KING) else WHITE
+
+
+def get_checker_color_short(color):
+    return color[0].upper()
 
 
 def get_direction_of_motion(board, row, column):
@@ -115,6 +120,7 @@ def check_falling_into_field(row, column):
     >>> check_falling_into_field(5, 9)
     False
     """
+    print('check_falling_into_field')
     if 0 <= row < BOARD_SIZE and 0 <= column < BOARD_SIZE:
         return True
     return False
@@ -417,43 +423,49 @@ def make_kings_move(board, start_row, start_column, end_row, end_column):
         board[start_row][start_column] = EMPTY_CELL
 
 
-def get_cells_diagonal(board, start_row, start_column, end_row, end_column):
-    diagonal = []
-    for number_row, row in enumerate(board):
-        for number_column, cell in enumerate(row):
-            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
-            check_on_diagonal(number_row, number_column, end_row, end_column) and \
-            (start_row < number_row <= end_row or end_row <= number_row < start_row):
-                diagonal.append(cell)
-    return diagonal
-
-
-def check_not_couple_in_diagonal(board, start_row, start_column, end_row, end_column):
-    diagonal = get_cells_diagonal(board, start_row, start_column, end_row, end_column)
-    try:
-        for n, cell in enumerate(diagonal):
-            if cell == diagonal[n + 1] and cell != EMPTY_CELL:
-                print(cell, diagonal[n + 1])
-                return False
-    finally:
-        return True
-
-
-def check_not_empty_diagonal(board, start_row, start_column, end_row, end_column):
-    diagonal = get_cells_diagonal(board, start_row, start_column, end_row, end_column)
-    return False if diagonal.count(EMPTY_CELL) == len(diagonal)else True
-
-
-def check_kings_take(board, start_row, start_column, end_row, end_column):
-    """
-    Check the possibility of taking a checker
+def get_cells_way(board, start_row, start_column, end_row, end_column):
+    '''
+    Get list cells on way Kings
     :param board:
     :param start_row:
     :param start_column:
     :param end_row:
     :param end_column:
-    :return: True
+    :return:
+    '''
+    way = []
+    for number_row, row in enumerate(board):
+        for number_column, cell in enumerate(row):
+            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
+            check_on_diagonal(number_row, number_column, end_row, end_column) and \
+            (start_row < number_row <= end_row or end_row <= number_row < start_row):
+                way.append(cell)
+    return way
 
+
+def check_one_cell_on_way(board, start_row, start_column, end_row, end_column):
+    '''
+    check the presence of one checker
+    '''
+    way = get_cells_way(board, start_row, start_column, end_row, end_column)
+    return True if way.count(EMPTY_CELL) == len(way) - 1 else False
+
+
+@use_observers
+def check_kings_take(board, start_row, start_column, end_row, end_column):
+    """
+    Check the possibility of taking a checker by Kings
+    :param board:
+    :param start_row:
+    :param start_column:
+    :param end_row:
+    :param end_column:
+    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    True
+    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    False
+    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'B', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    False
     """
     return (
         check_falling_into_field(start_row, start_column) and
@@ -461,23 +473,19 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
         (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
-        get_checker_color(board, start_row, start_column) not in get_cells_diagonal(board, start_row, start_column, end_row, end_column) and
-        check_not_empty_diagonal(board, start_row, start_column, end_row, end_column) and
-        check_not_couple_in_diagonal(board, start_row, start_column, end_row, end_column)
-
+        get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, end_row, end_column) and
+        check_one_cell_on_way(board, start_row, start_column, end_row, end_column)
     )
 
-
+'''
 if __name__ == "__main__":
-    #import doctest
-    #doctest.testmod()
-
+    import doctest
+    doctest.testmod()
 
     board = set_board()
     set_checkers(board)
     pprint.pprint(board)
 
-'''
     make_move(board, 2, 1, 3, 2)
     make_move(board, 3, 2, 4, 1)
     make_move(board, 1, 0, 2, 1)
@@ -490,7 +498,7 @@ if __name__ == "__main__":
     make_move(board, 1, 2, 2, 3)
     make_move(board, 2, 7, 3, 6)
     make_move(board, 1, 6, 2, 7)
-
+    pprint.pprint(board)
 
     #print('check_again_take', check_again_take_2(board, 5, 0, 3, 2))
     print('check_again_take', check_again_take_2(board, 5, 6, 3, 4))
