@@ -478,14 +478,42 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
         check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
+
+def get_cells_after_take_kings(board, start_row, start_column):
+    """
+    Get the cells after take kings
+    """
+    if not (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING):
+        return False
+    cells_after_take_kings = []
+    for number_row, row in enumerate(board):
+        for number_column, cell in enumerate(row):
+            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
+            (board[start_row][start_column] not in get_cells_way(board, start_row, start_column, number_row, number_column)) and \
+            (get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, number_row, number_column)) and \
+            check_one_checker_on_way(board, start_row, start_column, number_row, number_column) and \
+            board[number_row][number_column] == EMPTY_CELL:
+                cells_after_take_kings.append([number_row, number_column])
+    return cells_after_take_kings
+
+
 '''
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    #import doctest
+    #doctest.testmod()
 
     board = set_board()
-    set_checkers(board)
+    board = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', 'wk', ' ', 'W', ' ', ' ', ' '],
+             [' ', ' ', ' ', 'bk', ' ', ' ', ' ', ' '],
+             [' ', ' ', 'W', ' ', 'bk', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+    #set_checkers(board)
     pprint.pprint(board)
+
 
     make_move(board, 2, 1, 3, 2)
     make_move(board, 3, 2, 4, 1)
