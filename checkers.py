@@ -198,7 +198,7 @@ def get_cells_after_take(board, start_row, start_column):
     return cells_after_take
 
 
-def check_take(board, start_row, start_column, end_row, end_column):
+def check_take_checker(board, start_row, start_column, end_row, end_column):
     """
     Check the possibility of taking a checker
     :param board:
@@ -208,9 +208,9 @@ def check_take(board, start_row, start_column, end_row, end_column):
     :param end_column:
     :return: True
 
-    >>> check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
+    >>> check_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
     True
-    >>> check_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 3, 6)
+    >>> check_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 3, 6)
     False
 
     """
@@ -244,23 +244,23 @@ def get_list_of_cells(board, checker_color):
             board[row][column][0].upper() == get_checker_color_short(checker_color)]
 
 
-def get_list_of_takes(board, checker_color):
+def get_list_of_takes_checkers(board, checker_color):
     """
     Return the list of possible takes for the checkers of definite color
     :param board:
     :param checker_color:
     :return:
 
-    >>> get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], WHITE_SHORT)
+    >>> get_list_of_takes_checkers([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], WHITE_SHORT)
     []
-    >>> get_list_of_takes([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], BLACK_SHORT)
+    >>> get_list_of_takes_checkers([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], BLACK_SHORT)
     [[4, 3], [4, 1]]
     """
     list_of_takes = []
     list_of_cells = get_list_of_cells(board, checker_color)
     for [start_row, start_column] in list_of_cells:
         for [end_row, end_column] in get_cells_after_take(board, start_row, start_column):
-            if check_take(board, start_row, start_column, end_row, end_column):
+            if check_take_checker(board, start_row, start_column, end_row, end_column):
                 list_of_takes.append([end_row, end_column])
     return list_of_takes
 
@@ -319,7 +319,7 @@ def make_take(board, start_row, start_column, end_row, end_column):
     >>> make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 5, 4, 7)
     Take impossible
     """
-    if check_take(board, start_row, start_column, end_row, end_column):
+    if check_take_checker(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = board[start_row][start_column]
         board[start_row][start_column] = EMPTY_CELL
         board[int((end_row + start_row) / 2)][int((end_column + start_column) / 2)] = EMPTY_CELL
@@ -361,12 +361,12 @@ def check_again_take(board, start_row, start_column, end_row, end_column):
     >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
     True
     '''
-    if check_take(board, start_row, start_column, end_row, end_column):
+    if check_take_checker(board, start_row, start_column, end_row, end_column):
         board_after_take = copy.deepcopy(board)
         make_take(board_after_take, start_row, start_column, end_row, end_column)
         start_row, start_column = end_row, end_column
         for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
-            if check_take(board_after_take, start_row, start_column, end_row, end_column):
+            if check_take_checker(board_after_take, start_row, start_column, end_row, end_column):
                 return True
     return False
 
@@ -451,7 +451,7 @@ def check_one_checker_on_way(board, start_row, start_column, end_row, end_column
 
 
 @use_observers
-def check_kings_take(board, start_row, start_column, end_row, end_column):
+def check_take_kings(board, start_row, start_column, end_row, end_column):
     """
     Check the possibility of taking a checker by Kings
     :param board:
@@ -459,11 +459,11 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
     :param start_column:
     :param end_row:
     :param end_column:
-    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    >>> check_take_kings([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
     True
-    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    >>> check_take_kings([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
     False
-    >>> check_kings_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'B', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
+    >>> check_take_kings([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], ['W', ' ', 'W', ' ', 'B', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', ' ', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'bk', ' ']], 7, 6, 1, 0)
     False
     """
     return (
@@ -502,15 +502,24 @@ def get_cells_after_take_kings(board, start_row, start_column):
 
 def get_list_of_takes_kings(board, checker_color):
     """
-    Return the list of possible takes for the kingss of definite color
+    Return the list of possible takes for the kings of definite color
     """
     list_of_takes_kings = []
     list_of_cells = get_list_of_cells(board, checker_color)
     for [start_row, start_column] in list_of_cells:
         for [end_row, end_column] in get_cells_after_take_kings(board, start_row, start_column):
-            if check_kings_take(board, start_row, start_column, end_row, end_column):
+            if check_take_kings(board, start_row, start_column, end_row, end_column):
                 list_of_takes_kings.append([end_row, end_column])
     return list_of_takes_kings
+
+
+def check_take(board, checker_color):
+    '''
+    Return the possible takes for the checkers or kings of definite color
+    '''
+    return True if len(get_list_of_takes_checkers(board, checker_color)) > 0 or \
+                   len(get_list_of_takes_kings(board, checker_color)) > 0 \
+        else False
 
 
 '''
@@ -520,12 +529,12 @@ if __name__ == "__main__":
 
     board = set_board()
     board = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', 'wk', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', 'wk', ' ', ' ', ' ', 'W', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', 'W', ' ', 'bk', ' ', ' ', ' '],
+             [' ', 'bk', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             ['bk', ' ', ' ', ' ', ' ', ' ', 'wk', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
     #set_checkers(board)
     pprint.pprint(board)
