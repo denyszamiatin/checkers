@@ -261,8 +261,8 @@ def get_list_of_takes(board, checker_color):
     list_of_cells = get_list_of_cells(board, checker_color)
     for [start_row, start_column] in list_of_cells:
         for [end_row, end_column] in get_cells_after_take(board, start_row, start_column):
-                   if check_take(start_row, start_column, end_row, end_column):
-                       list_of_takes.append([end_row, end_column])
+            if check_take(start_row, start_column, end_row, end_column):
+                list_of_takes.append([end_row, end_column])
     return list_of_takes
 
 
@@ -346,11 +346,9 @@ def count_the_number_of_checkers_taken(board, row, column):
     '''
     if get_checker_color(board, row, column) == BLACK:
         taken['taken_black'] += 1
-        #print('taken_black: ', taken['taken_black'])
-
     else:
         taken['taken_white'] += 1
-        #print('taken_white: ', taken['taken_white'])
+
 
 def check_again_take(board, start_row, start_column, end_row, end_column):
     '''
@@ -388,8 +386,10 @@ def turn_into_king(board, row, column):
         elif board[row][column] == WHITE_SHORT and row == 0:
             board[row][column] = WHITE_KING
 
+
 def check_on_diagonal(start_row, start_column, end_row, end_column):
     return True if abs(end_row - start_row) == abs(end_column - start_column) else False
+
 
 def check_kings_move(board, start_row, start_column, end_row, end_column):
     """
@@ -443,7 +443,7 @@ def get_cells_way(board, start_row, start_column, end_row, end_column):
     return way
 
 
-def check_one_cell_on_way(board, start_row, start_column, end_row, end_column):
+def check_one_checker_on_way(board, start_row, start_column, end_row, end_column):
     '''
     check the presence of one checker
     '''
@@ -475,7 +475,7 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
         check_on_diagonal(start_row, start_column, end_row, end_column) and
         get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, end_row, end_column) and
         board[start_row][start_column] not in get_cells_way(board, start_row, start_column, end_row, end_column) and
-        check_one_cell_on_way(board, start_row, start_column, end_row, end_column)
+        check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
 '''
