@@ -83,7 +83,6 @@ def get_checker_color(board, row, column):
     >>> get_checker_color([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 6, 3)
     'white'
     """
-    print('get_checker_color')
     if board[row][column] == EMPTY_CELL:
         raise ValueError
     return BLACK if (board[row][column] == BLACK_SHORT or board[row][column] == BLACK_KING) else WHITE
@@ -120,7 +119,6 @@ def check_falling_into_field(row, column):
     >>> check_falling_into_field(5, 9)
     False
     """
-    print('check_falling_into_field')
     if 0 <= row < BOARD_SIZE and 0 <= column < BOARD_SIZE:
         return True
     return False
@@ -242,7 +240,8 @@ def get_list_of_cells(board, checker_color):
     """
     return [[row, column] for row in range(BOARD_SIZE)
             for column in range(BOARD_SIZE)
-            if board[row][column] == checker_color]
+            if board[row][column] == get_checker_color_short(checker_color) or
+            board[row][column][0].upper() == get_checker_color_short(checker_color)]
 
 
 def get_list_of_takes(board, checker_color):
@@ -261,7 +260,7 @@ def get_list_of_takes(board, checker_color):
     list_of_cells = get_list_of_cells(board, checker_color)
     for [start_row, start_column] in list_of_cells:
         for [end_row, end_column] in get_cells_after_take(board, start_row, start_column):
-            if check_take(start_row, start_column, end_row, end_column):
+            if check_take(board, start_row, start_column, end_row, end_column):
                 list_of_takes.append([end_row, end_column])
     return list_of_takes
 
@@ -473,28 +472,45 @@ def check_kings_take(board, start_row, start_column, end_row, end_column):
         (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
-        get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, end_row, end_column) and
+        not check_checker_color_in_way(board, start_row, start_column, end_row, end_column) and
         board[start_row][start_column] not in get_cells_way(board, start_row, start_column, end_row, end_column) and
         check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
 
+def check_checker_color_in_way(board, start_row, start_column, number_row, number_column):
+    checker_color = get_checker_color(board, start_row, start_column)
+    return True if get_checker_color_short(get_checker_color(board, start_row, start_column)) \
+                   in get_cells_way(board, start_row, start_column, number_row, number_column) else False
+
 def get_cells_after_take_kings(board, start_row, start_column):
     """
     Get the cells after take kings
     """
-    if not (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING):
-        return False
     cells_after_take_kings = []
     for number_row, row in enumerate(board):
         for number_column, cell in enumerate(row):
-            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
+            if (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and \
+            check_on_diagonal(start_row, start_column, number_row, number_column) and \
             (board[start_row][start_column] not in get_cells_way(board, start_row, start_column, number_row, number_column)) and \
-            (get_checker_color_short(get_checker_color(board, start_row, start_column)) not in get_cells_way(board, start_row, start_column, number_row, number_column)) and \
+            not check_checker_color_in_way(board, start_row, start_column, number_row, number_column) and \
             check_one_checker_on_way(board, start_row, start_column, number_row, number_column) and \
             board[number_row][number_column] == EMPTY_CELL:
                 cells_after_take_kings.append([number_row, number_column])
     return cells_after_take_kings
+
+
+def get_list_of_takes_kings(board, checker_color):
+    """
+    Return the list of possible takes for the kingss of definite color
+    """
+    list_of_takes_kings = []
+    list_of_cells = get_list_of_cells(board, checker_color)
+    for [start_row, start_column] in list_of_cells:
+        for [end_row, end_column] in get_cells_after_take_kings(board, start_row, start_column):
+            if check_kings_take(board, start_row, start_column, end_row, end_column):
+                list_of_takes_kings.append([end_row, end_column])
+    return list_of_takes_kings
 
 
 '''
@@ -505,11 +521,11 @@ if __name__ == "__main__":
     board = set_board()
     board = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', 'wk', ' ', 'W', ' ', ' ', ' '],
-             [' ', ' ', ' ', 'bk', ' ', ' ', ' ', ' '],
+             [' ', ' ', 'wk', ' ', ' ', ' ', 'W', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', 'W', ' ', 'bk', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             ['bk', ' ', ' ', ' ', ' ', ' ', 'wk', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
     #set_checkers(board)
     pprint.pprint(board)
