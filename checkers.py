@@ -283,7 +283,7 @@ def is_fight(board, color):  # Есть ли бой
     return enemy
 
 
-def make_move(board, start_row, start_column, end_row, end_column):
+def make_move_checker(board, start_row, start_column, end_row, end_column):
     """
     Function to make move if possible, otherwise get a message
     :param board:
@@ -292,9 +292,9 @@ def make_move(board, start_row, start_column, end_row, end_column):
     :param end_row:
     :param end_column:
     :return:
-    >>> make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1, 4, 3)
+    >>> make_move_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 1, 4, 3)
     Move impossible
-    >>> make_move([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 4, 5)
+    >>> make_move_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 4, 4, 5)
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', 'W', ' ', ' '], ['W', ' ', 'W', ' ', ' ', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
     """
     if possibility_to_go(board, start_row, start_column, end_row, end_column):
@@ -305,7 +305,7 @@ def make_move(board, start_row, start_column, end_row, end_column):
         print('Move impossible')
 
 @use_observers
-def make_take(board, start_row, start_column, end_row, end_column):
+def make_take_checker(board, start_row, start_column, end_row, end_column):
     """
     Function to make take if possible, otherwise get a message
     :param board:
@@ -314,9 +314,9 @@ def make_take(board, start_row, start_column, end_row, end_column):
     :param end_row:
     :param end_column:
     :return:
-    >>> make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
+    >>> make_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 3, 4, 1)
     [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', ' ', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
-    >>> make_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 5, 4, 7)
+    >>> make_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'W', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 2, 5, 4, 7)
     Take impossible
     """
     if check_take_checker(board, start_row, start_column, end_row, end_column):
@@ -349,21 +349,21 @@ def count_the_number_of_checkers_taken(board, row, column):
         taken['taken_white'] += 1
 
 
-def check_again_take(board, start_row, start_column, end_row, end_column):
+def check_again_take_checker(board, start_row, start_column, end_row, end_column):
     '''
     :param board:
     :param start_row:
     :param start_column:
     :param end_row:
     :param end_column:
-    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    >>> check_again_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', ' ', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
     False
-    >>> check_again_take([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
+    >>> check_again_take_checker([[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', 'B', ' ', 'B', ' ', 'B', ' '], [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' '], [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'], ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']], 5, 0, 3, 2)
     True
     '''
     if check_take_checker(board, start_row, start_column, end_row, end_column):
         board_after_take = copy.deepcopy(board)
-        make_take(board_after_take, start_row, start_column, end_row, end_column)
+        make_take_checker(board_after_take, start_row, start_column, end_row, end_column)
         start_row, start_column = end_row, end_column
         for end_row, end_column in get_cells_after_take(board_after_take, start_row, start_column):
             if check_take_checker(board_after_take, start_row, start_column, end_row, end_column):
@@ -390,7 +390,7 @@ def check_on_diagonal(start_row, start_column, end_row, end_column):
     return True if abs(end_row - start_row) == abs(end_column - start_column) else False
 
 
-def check_kings_move(board, start_row, start_column, end_row, end_column):
+def check_move_kings(board, start_row, start_column, end_row, end_column):
     """
     Function that checks king's move
     :param board:
@@ -407,7 +407,7 @@ def check_kings_move(board, start_row, start_column, end_row, end_column):
         check_on_diagonal(start_row, start_column, end_row, end_column))
 
 
-def make_kings_move(board, start_row, start_column, end_row, end_column):
+def make_move_kings(board, start_row, start_column, end_row, end_column):
     """
     Function that makes king's move if possible
     :param board:
@@ -417,20 +417,24 @@ def make_kings_move(board, start_row, start_column, end_row, end_column):
     :param end_column:
     :return:
     """
-    if check_kings_move(board, start_row, start_column, end_row, end_column):
+    if check_move_kings(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] = WHITE_KING if board[start_row][start_column] == WHITE_KING else BLACK_KING
         board[start_row][start_column] = EMPTY_CELL
 
 
-def get_cells_way(board, start_row, start_column, end_row, end_column):
+def make_move(board, start_row, start_column, end_row, end_column):
+    '''
+    Make_move checker or kings
+    '''
+    if len(board[start_row][start_column]) == 1:
+        make_move_checker(board, start_row, start_column, end_row, end_column)
+    else:
+        make_move_kings(board, start_row, start_column, end_row, end_column)
+
+
+def get_cells_way_kings(board, start_row, start_column, end_row, end_column):
     '''
     Get list cells on way Kings
-    :param board:
-    :param start_row:
-    :param start_column:
-    :param end_row:
-    :param end_column:
-    :return:
     '''
     way = []
     for number_row, row in enumerate(board):
@@ -446,7 +450,7 @@ def check_one_checker_on_way(board, start_row, start_column, end_row, end_column
     '''
     check the presence of one checker
     '''
-    way = get_cells_way(board, start_row, start_column, end_row, end_column)
+    way = get_cells_way_kings(board, start_row, start_column, end_row, end_column)
     return True if way.count(EMPTY_CELL) == len(way) - 1 else False
 
 
@@ -473,15 +477,14 @@ def check_take_kings(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
         not check_checker_color_in_way(board, start_row, start_column, end_row, end_column) and
-        board[start_row][start_column] not in get_cells_way(board, start_row, start_column, end_row, end_column) and
+        board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, end_row, end_column) and
         check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
 
 def check_checker_color_in_way(board, start_row, start_column, number_row, number_column):
-    checker_color = get_checker_color(board, start_row, start_column)
     return True if get_checker_color_short(get_checker_color(board, start_row, start_column)) \
-                   in get_cells_way(board, start_row, start_column, number_row, number_column) else False
+                   in get_cells_way_kings(board, start_row, start_column, number_row, number_column) else False
 
 def get_cells_after_take_kings(board, start_row, start_column):
     """
@@ -492,7 +495,7 @@ def get_cells_after_take_kings(board, start_row, start_column):
         for number_column, cell in enumerate(row):
             if (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and \
             check_on_diagonal(start_row, start_column, number_row, number_column) and \
-            (board[start_row][start_column] not in get_cells_way(board, start_row, start_column, number_row, number_column)) and \
+            (board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, number_row, number_column)) and \
             not check_checker_color_in_way(board, start_row, start_column, number_row, number_column) and \
             check_one_checker_on_way(board, start_row, start_column, number_row, number_column) and \
             board[number_row][number_column] == EMPTY_CELL:
@@ -528,40 +531,41 @@ if __name__ == "__main__":
     #doctest.testmod()
 
     board = set_board()
-    board = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', ' ', ' ', 'wk', ' ', ' ', ' '],
+    set_checkers(board)
+    board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
+             ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
+             [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', 'bk', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
-    #set_checkers(board)
+             ['W', ' ', 'wk', ' ', 'W', ' ', 'W', ' '],
+             [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'],
+             ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
+
     pprint.pprint(board)
 
 
-    make_move(board, 2, 1, 3, 2)
-    make_move(board, 3, 2, 4, 1)
-    make_move(board, 1, 0, 2, 1)
-    make_move(board, 2, 5, 3, 6)
-    make_move(board, 3, 6, 4, 7)
-    make_move(board, 1, 4, 2, 5)
+    make_move_checker(board, 2, 1, 3, 2)
+    make_move_checker(board, 3, 2, 4, 1)
+    make_move_checker(board, 1, 0, 2, 1)
+    make_move_checker(board, 2, 5, 3, 6)
+    make_move_checker(board, 3, 6, 4, 7)
+    make_move_checker(board, 1, 4, 2, 5)
 
-    make_move(board, 2, 3, 3, 4)
-    make_move(board, 3, 4, 4, 5)
-    make_move(board, 1, 2, 2, 3)
-    make_move(board, 2, 7, 3, 6)
-    make_move(board, 1, 6, 2, 7)
+    make_move_checker(board, 2, 3, 3, 4)
+    make_move_checker(board, 3, 4, 4, 5)
+    make_move_checker(board, 1, 2, 2, 3)
+    make_move_checker(board, 2, 7, 3, 6)
+    make_move_checker(board, 1, 6, 2, 7)
     pprint.pprint(board)
 
-    #print('check_again_take', check_again_take_2(board, 5, 0, 3, 2))
-    print('check_again_take', check_again_take_2(board, 5, 6, 3, 4))
+    #print('check_again_take_checker', check_again_take_2(board, 5, 0, 3, 2))
+    print('check_again_take_checker', check_again_take_2(board, 5, 6, 3, 4))
     #pprint.pprint(board)
 
 
-    make_take(board, 5, 0, 3, 2)
+    make_take_checker(board, 5, 0, 3, 2)
     pprint.pprint(board)
-    make_take(board, 3, 2, 1, 0)
+    make_take_checker(board, 3, 2, 1, 0)
     pprint.pprint(board)
     print(taken)
 
