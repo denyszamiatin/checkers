@@ -480,7 +480,6 @@ def check_take_kings(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
         not check_checker_color_in_way(board, start_row, start_column, end_row, end_column) and
-        board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, end_row, end_column) and #чи немає дамки того ж кольору на шляху
         check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
@@ -501,7 +500,6 @@ def get_cells_after_take_kings(board, start_row, start_column):
                               if check_falling_into_field(row, column) and board[row][column] == EMPTY_CELL and
                               (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and
                               check_on_diagonal(start_row, start_column, row, column) and
-                              (board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, row, column)) and
                               not check_checker_color_in_way(board, start_row, start_column, row, column) and
                               check_one_checker_on_way(board, start_row, start_column, row, column) and
                               board[row][column] == EMPTY_CELL]
