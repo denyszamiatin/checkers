@@ -426,24 +426,27 @@ def make_move(board, start_row, start_column, end_row, end_column):
     '''
     Make_move checker or kings
     '''
-    if len(board[start_row][start_column]) == 1:
-        make_move_checker(board, start_row, start_column, end_row, end_column)
-    else:
+    if board[start_row][start_column] is BLACK_KING or board[start_row][start_column] is WHITE_KING:
         make_move_kings(board, start_row, start_column, end_row, end_column)
+    else:
+        make_move_checker(board, start_row, start_column, end_row, end_column)
 
+
+def direction_way(start, end):
+    return 1 if abs(end - start) == end - start else -1
 
 def get_cells_way_kings(board, start_row, start_column, end_row, end_column):
     '''
     Get list cells on way Kings
     '''
     way = []
-    for number_row, row in enumerate(board):
-        for number_column, cell in enumerate(row):
-            if check_on_diagonal(start_row, start_column, number_row, number_column) and \
-            check_on_diagonal(number_row, number_column, end_row, end_column) and \
-            (start_row < number_row <= end_row or end_row <= number_row < start_row):
-                way.append(cell)
-    return way
+    step_row = direction_way(start_row, end_row)
+    step_column = direction_way(start_column, end_column)
+    while [start_row, start_column] != [end_row, end_column]:
+        way.append(board[start_row][start_column])
+        start_row += step_row
+        start_column += step_column
+    return way[1:]
 
 
 def check_one_checker_on_way(board, start_row, start_column, end_row, end_column):
@@ -451,7 +454,7 @@ def check_one_checker_on_way(board, start_row, start_column, end_row, end_column
     check the presence of one checker
     '''
     way = get_cells_way_kings(board, start_row, start_column, end_row, end_column)
-    return True if way.count(EMPTY_CELL) == len(way) - 1 else False
+    return way.count(EMPTY_CELL) == len(way) - 1
 
 
 @use_observers
@@ -477,29 +480,31 @@ def check_take_kings(board, start_row, start_column, end_row, end_column):
         board[end_row][end_column] == EMPTY_CELL and
         check_on_diagonal(start_row, start_column, end_row, end_column) and
         not check_checker_color_in_way(board, start_row, start_column, end_row, end_column) and
-        board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, end_row, end_column) and
+        board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, end_row, end_column) and #чи немає дамки того ж кольору на шляху
         check_one_checker_on_way(board, start_row, start_column, end_row, end_column)
     )
 
 
 def check_checker_color_in_way(board, start_row, start_column, number_row, number_column):
-    return True if get_checker_color_short(get_checker_color(board, start_row, start_column)) \
-                   in get_cells_way_kings(board, start_row, start_column, number_row, number_column) else False
+    return get_checker_color_short(get_checker_color(board, start_row, start_column)) \
+           in get_cells_way_kings(board, start_row, start_column, number_row, number_column)
 
 def get_cells_after_take_kings(board, start_row, start_column):
     """
     Get the cells after take kings
     """
     cells_after_take_kings = []
-    for number_row, row in enumerate(board):
-        for number_column, cell in enumerate(row):
-            if (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and \
-            check_on_diagonal(start_row, start_column, number_row, number_column) and \
-            (board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, number_row, number_column)) and \
-            not check_checker_color_in_way(board, start_row, start_column, number_row, number_column) and \
-            check_one_checker_on_way(board, start_row, start_column, number_row, number_column) and \
-            board[number_row][number_column] == EMPTY_CELL:
-                cells_after_take_kings.append([number_row, number_column])
+    list_offset = [i for i in range(1, BOARD_SIZE)] + [i for i in range(-1, -BOARD_SIZE, -1)]
+    cells_after_take_kings = [[start_row + r_offset, start_column + c_offset]
+                        for r_offset in list_offset for c_offset in list_offset]
+    cells_after_take_kings = [[row, column] for row, column in cells_after_take_kings
+                              if check_falling_into_field(row, column) and board[row][column] == EMPTY_CELL and
+                              (board[start_row][start_column] == BLACK_KING or board[start_row][start_column] == WHITE_KING) and
+                              check_on_diagonal(start_row, start_column, row, column) and
+                              (board[start_row][start_column] not in get_cells_way_kings(board, start_row, start_column, row, column)) and
+                              not check_checker_color_in_way(board, start_row, start_column, row, column) and
+                              check_one_checker_on_way(board, start_row, start_column, row, column) and
+                              board[row][column] == EMPTY_CELL]
     return cells_after_take_kings
 
 
@@ -520,9 +525,7 @@ def check_take(board, checker_color):
     '''
     Return the possible takes for the checkers or kings of definite color
     '''
-    return True if len(get_list_of_takes_checkers(board, checker_color)) > 0 or \
-                   len(get_list_of_takes_kings(board, checker_color)) > 0 \
-        else False
+    return get_list_of_takes_checkers(board, checker_color) or get_list_of_takes_kings(board, checker_color)
 
 
 '''
@@ -532,14 +535,14 @@ if __name__ == "__main__":
 
     board = set_board()
     set_checkers(board)
-    board = [[' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
-             ['B', ' ', 'B', ' ', 'B', ' ', 'B', ' '],
-             [' ', 'B', ' ', 'B', ' ', 'B', ' ', 'B'],
+    board = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', 'bk', ' ', ' ', ' ', 'B', ' ', ' '],
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', 'wk', ' ', ' ', ' ', ' '],
+             [' ', ' ', ' ', ' ', 'B', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
              [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-             ['W', ' ', 'wk', ' ', 'W', ' ', 'W', ' '],
-             [' ', 'W', ' ', 'W', ' ', 'W', ' ', 'W'],
-             ['W', ' ', 'W', ' ', 'W', ' ', 'W', ' ']]
+             [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
 
     pprint.pprint(board)
 
