@@ -526,6 +526,8 @@ def check_take(board, checker_color):
     return get_list_of_takes_checkers(board, checker_color) or get_list_of_takes_kings(board, checker_color)
 
 
+
+
 '''
 if __name__ == "__main__":
     #import doctest
